@@ -1,5 +1,5 @@
 import Head from "next/head";
-import config from "../config";
+import config from "../../shared/config";
 
 type Props = {
   title?: string;
@@ -7,6 +7,7 @@ type Props = {
 };
 
 function CustomHead(props: Props) {
+  console.log(config);
   return (
     <Head>
       <title>
