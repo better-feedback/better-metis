@@ -1,5 +1,8 @@
-import postProposalMeta from "../../features/api-routes/proposals/post-meta";
-import { ApiError, apiErrorHandler } from "../../features/api-routes/utils";
+import { postProposalHandler } from "../../features/api-routes/handlers/proposals";
+import {
+  ApiError,
+  apiErrorHandler,
+} from "../../features/api-routes/handlers/utils";
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -18,7 +21,7 @@ export default async function handler(
        * `POST /proposal`
        */
       case "POST":
-        return postProposalMeta(req, res);
+        return postProposalHandler(req, res);
       default:
         throw new ApiError(400, `Method ${req.method} not allowed`);
     }

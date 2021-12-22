@@ -1,33 +1,29 @@
-import * as githubApi from "../../github/api";
+import * as githubApi from "../../api/github";
 import {
   getMetadataAndCleanedComment,
   setMetadataComment,
   buildMetadataInfoText,
-} from "../../github/utils";
+} from "../../api/github/utils";
 import { ApiError } from "../utils";
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
-type PostBody = {
-  issueNumber: number;
-  chain: string;
-  proposalId: number;
-};
-
-type Data = {
-  message?: string;
-  error?: any;
-};
-
 /**
  * `POST /proposal`
  */
-export default async function handler(
+export async function postProposalHandler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse<{
+    message?: string;
+    error?: any;
+  }>
 ) {
   const requiredPostBodyKeys = ["issueNumber", "chain", "proposalId"];
-  const postBody: PostBody = req.body;
+  const postBody: {
+    issueNumber: number;
+    chain: string;
+    proposalId: number;
+  } = req.body;
 
   Object.keys(postBody).forEach((postBodyKey) => {
     if (!requiredPostBodyKeys.includes(postBodyKey)) {

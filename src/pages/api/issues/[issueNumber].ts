@@ -1,5 +1,8 @@
-import getIssueDetails from "../../../features/api-routes/issues/get-details";
-import { ApiError, apiErrorHandler } from "../../../features/api-routes/utils";
+import { getIssueDetailsHandler } from "../../../features/api-routes/handlers/issues";
+import {
+  ApiError,
+  apiErrorHandler,
+} from "../../../features/api-routes/handlers/utils";
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -18,7 +21,7 @@ export default async function handler(
        * `GET /issues/:issueNumber`
        */
       case "GET":
-        return getIssueDetails(req, res);
+        return getIssueDetailsHandler(req, res);
       default:
         throw new ApiError(400, `Method ${req.method} not allowed`);
     }

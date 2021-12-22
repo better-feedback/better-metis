@@ -1,4 +1,4 @@
-import * as githubUtils from "../../src/features/github/utils";
+import * as githubUtils from "../utils";
 
 describe("github", () => {
   describe("#getMetadataAndClean()", () => {
@@ -17,7 +17,7 @@ describe("github", () => {
       )} -->`;
 
       const { metadata: descriptionMetadata } =
-        githubUtils.getMetadataAndClean(description);
+        githubUtils.getMetadataAndCleanedComment(description);
       expect(descriptionMetadata).toMatchObject(metadata);
     });
 
@@ -25,7 +25,7 @@ describe("github", () => {
       const description = `This is a description`;
 
       const { metadata: descriptionMetadata } =
-        githubUtils.getMetadataAndClean(description);
+        githubUtils.getMetadataAndCleanedComment(description);
       expect(descriptionMetadata).toMatchObject({
         chainProposals: [],
       });

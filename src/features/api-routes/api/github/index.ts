@@ -1,9 +1,9 @@
 import { Octokit } from "octokit";
 
-import config from "../../config";
+import config from "../../../../config";
 import { metadataCommentRegex } from "./utils";
 
-import type { ReqParams } from "../shared/types";
+import type { ReqParams } from "../../../shared/types";
 
 const octokit = new Octokit({ auth: config.github.pat });
 
