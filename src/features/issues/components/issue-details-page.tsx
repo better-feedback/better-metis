@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 
-import Layout from "../../shared/components/layout";
+import Layout from "../../common/components/layout";
 import { IssueDetails } from "./issue-details";
 
 import type { NextPage } from "next";

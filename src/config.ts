@@ -1,41 +1,42 @@
-type Config = {
-  github: {
-    repoOwner: string;
-    repoName: string;
-    betterIssueLabel: string;
-    pat: string;
-  };
-  chains: {
-    near: {
-      apiBaseUrl: string;
-      jsonRpcUrl: string;
-      daoId: string;
-    };
-  };
-  projectName: string;
-  siteTitle: string;
-  chain: "near";
+export const githubConfig = {
+  repoOwner: process.env.NEXT_PUBLIC_REPO_OWNER || "",
+  repoName: process.env.NEXT_PUBLIC_REPO_NAME || "",
+  labels: {
+    open: "bug",
+    planned: "planned",
+    inProgress: "in progress",
+  },
+
+  // secret
+  pat: process.env.GITHUB_PAT || "",
 };
 
-export const config: Config = {
-  github: {
-    repoOwner: process.env.NEXT_PUBLIC_REPO_OWNER || "",
-    repoName: process.env.NEXT_PUBLIC_REPO_NAME || "",
-    betterIssueLabel: "better",
+export const nearChainConfig = {
+  networkId: process.env.NEXT_PUBLIC_NEAR_NETWORK_ID || "",
+  walletUrl: process.env.NEXT_PUBLIC_NEAR_WALLET_URL || "",
+  helperUrl: process.env.NEXT_PUBLIC_NEAR_HELPER_URL || "",
+  explorerUrl: process.env.NEXT_PUBLIC_NEAR_EXPLORER_URL || "",
+  apiBaseUrl: process.env.NEXT_PUBLIC_NEAR_API_BASE_URL || "",
+  jsonRpcUrl: process.env.NEXT_PUBLIC_NEAR_JSON_RPC_URL || "",
+  daoId: process.env.NEXT_PUBLIC_NEAR_DAO_ID || "",
+};
 
-    // secret
-    pat: process.env.GITHUB_PAT || "",
-  },
-  chains: {
-    near: {
-      apiBaseUrl: process.env.NEXT_PUBLIC_NEAR_API_BASE_URL || "",
-      jsonRpcUrl: process.env.NEXT_PUBLIC_NEAR_JSON_RPC_URL || "",
-      daoId: process.env.NEXT_PUBLIC_NEAR_DAO_ID || "",
-    },
-  },
+export const siteConfig = {
+  enabledChains: ["near"],
   projectName: "Better",
-  siteTitle: "Better",
-  chain: "near",
+  title: "Better",
+  externalLinks: {
+    homepage: "",
+    docs: "",
+  },
+};
+
+export const config = {
+  github: githubConfig,
+  chains: {
+    near: nearChainConfig,
+  },
+  site: siteConfig,
 };
 
 export default config;

@@ -22,6 +22,9 @@ export async function getIssuesListHandler(
     const githubIssues = await githubApi.getIssues({
       page: Number(req.query.page) || 1,
       perPage: Number(req.query.perPage) || 10,
+      labels: Array.isArray(req.query.labels)
+        ? req.query.labels.join(",")
+        : req.query.labels,
     });
 
     const githubIssuesWithMetadataComment = await Promise.all(

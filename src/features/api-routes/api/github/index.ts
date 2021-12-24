@@ -3,17 +3,22 @@ import { Octokit } from "octokit";
 import config from "../../../../config";
 import { metadataCommentRegex } from "./utils";
 
-import type { ReqParams } from "../../../shared/types";
+import type { ReqParams } from "../../../common/types";
 
 const octokit = new Octokit({ auth: config.github.pat });
 
-export async function getIssues(reqParams: ReqParams = {}) {
+export async function getIssues(
+  reqParams: ReqParams & {
+    labels?: string;
+  }
+) {
+  const { perPage = 10, page = 1, labels } = reqParams;
   const { data = [] } = await octokit.rest.issues.listForRepo({
     owner: config.github.repoOwner,
     repo: config.github.repoName,
-    labels: config.github.betterIssueLabel,
-    per_page: reqParams.perPage,
-    page: reqParams.page,
+    labels,
+    per_page: perPage,
+    page,
   });
 
   return data;
