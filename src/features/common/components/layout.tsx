@@ -11,10 +11,12 @@ type Props = {
 
 export function Layout(props: Props) {
   return (
-    <div>
+    <div className="text-white min-h-screen bg-gray-900">
       <Head title={props.title} metaDescription={props.metaDescription} />
       <HeaderNav />
-      <main>{props.children}</main>
+      <main>
+        <div className="container mx-auto p-4">{props.children}</div>
+      </main>
       <Footer />
     </div>
   );

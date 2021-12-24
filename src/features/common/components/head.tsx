@@ -1,18 +1,17 @@
 import Head from "next/head";
-import config from "../../../config";
+import config from "config";
 
 type Props = {
   title?: string;
   metaDescription?: string;
 };
 
-function CustomHead(props: Props) {
-  console.log(config);
+export function CustomHead(props: Props) {
   return (
     <Head>
       <title>
         {props.title ? `${props.title} | ` : ""}
-        {config.siteTitle}
+        {config.site.title}
       </title>
       <meta name="description" content={props.metaDescription} />
       <link rel="icon" href="/favicon.ico" />
