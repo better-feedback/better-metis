@@ -1,39 +1,45 @@
-import { useQuery, useMutation } from "react-query";
-import { getIssueByNumber, addProposalToMetadataComment } from "../api";
+import { useQuery } from "react-query";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
-type Props = {
-  issueNumber: number;
-};
+import { getIssueByNumber } from "../api";
+import IssueDetailsHeading from "./issue-details-heading";
+import IssueDetailsSidebar from "./issue-details-sidebar";
 
-export function IssueDetails(props: Props) {
-  const { data, isLoading, isFetching } = useQuery(
+export function IssueDetails(props: { issueNumber: number }) {
+  const {
+    data: issue,
+    isLoading,
+    isFetching,
+  } = useQuery(
     ["issues", props.issueNumber],
     () => getIssueByNumber(props.issueNumber),
     { enabled: Boolean(props.issueNumber) }
   );
 
-  const addProposalMutation = useMutation((chainProposal: any) =>
-    addProposalToMetadataComment(props.issueNumber, chainProposal)
-  );
+  console.log(issue);
 
-  if (isLoading || !data) {
+  if (isLoading) {
     return <div>Loading...</div>;
   }
 
+  if (!issue) {
+    return <div>Not found</div>;
+  }
+
   return (
-    <div>
-      <div>Number: {data.number}</div>
-      <button
-        onClick={() =>
-          addProposalMutation.mutate({
-            chain: "near",
-            proposalId: 1,
-          })
-        }
-        disabled={addProposalMutation.isLoading}
-      >
-        {addProposalMutation.isLoading ? "Funding..." : "Fund Me"}
-      </button>
+    <div className="max-w-4xl grid grid-cols-5 mx-auto">
+      <div className="col-span-5">
+        <IssueDetailsHeading issue={issue} />
+      </div>
+      <div className="col-span-4">
+        <div className="prose dark:prose-invert">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {issue.body}
+          </ReactMarkdown>
+        </div>
+      </div>
+      <IssueDetailsSidebar issueNumber={props.issueNumber} />
     </div>
   );
 }

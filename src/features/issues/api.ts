@@ -15,7 +15,9 @@ export async function getIssues(issueType: IssueType, params: ReqParams) {
 }
 
 export async function getIssueByNumber(issueNumber: number) {
-  const { data = {} } = await axios.get<any>(`/api/issues/${issueNumber}`);
+  const { data } = await axios.get<{ issue: Issue }>(
+    `/api/issues/${issueNumber}`
+  );
   return data.issue;
 }
 
