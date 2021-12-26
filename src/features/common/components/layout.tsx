@@ -11,7 +11,7 @@ type Props = {
 
 export function Layout(props: Props) {
   return (
-    <div className="text-white min-h-screen bg-gray-900">
+    <div className="min-h-screen dark:bg-zinc-900 dark:text-white">
       <Head title={props.title} metaDescription={props.metaDescription} />
       <HeaderNav />
       <main>

@@ -18,7 +18,11 @@ export default function ListItemMetadata(props: { metadata: Metadata }) {
 
         return (
           <div key={chain} className="hover:text-black">
-            <ChainIcon chainName={chain} size={16} />
+            <ChainIcon
+              chainName={chain}
+              size={16}
+              className="dark:fill-current dark:text-white"
+            />
             <div className="text-xs text-center font-bold">{numBounties}</div>
           </div>
         );

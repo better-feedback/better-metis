@@ -1,4 +1,4 @@
-export default function NearLogo(props: { size?: number }) {
+export default function NearLogo(props: { size?: number; className?: string }) {
   return (
     <svg
       version="1.1"
@@ -9,7 +9,7 @@ export default function NearLogo(props: { size?: number }) {
       y="0px"
       viewBox="0 0 90.1 90"
       xmlSpace="preserve"
-      className="fill-current stroke-current text-white"
+      className={props.className}
       height={props.size || 24}
       width={props.size || 24}
     >

@@ -16,4 +16,5 @@ export type Issue = {
   user: {
     login: string;
   };
+  html_url: string;
 };

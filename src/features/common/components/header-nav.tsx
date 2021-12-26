@@ -5,7 +5,7 @@ import config from "config";
 
 export default function HeaderNav() {
   return (
-    <header className="bg-gray-800 shadow-xl">
+    <header className="shadow-md dark:bg-zinc-800">
       <nav className="container mx-auto p-4 flex flex-row justify-between items-center">
         <Link href={{ pathname: "/" }}>{config.site.projectName}</Link>
         <ConnectWalletButton />

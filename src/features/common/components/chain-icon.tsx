@@ -5,12 +5,16 @@ import NearLogo from "./icons/near-logo";
 
 const chainNameToIcon: Record<
   string,
-  (props: { size?: number }) => JSX.Element
+  (props: { size?: number; className?: string }) => JSX.Element
 > = {
   near: NearLogo,
 };
 
-export default function ChainIcon(props: { chainName: string; size?: number }) {
+export default function ChainIcon(props: {
+  chainName: string;
+  size?: number;
+  className?: string;
+}) {
   const size = props.size || 32;
   const Icon = chainNameToIcon[props.chainName];
 
@@ -18,5 +22,5 @@ export default function ChainIcon(props: { chainName: string; size?: number }) {
     return null;
   }
 
-  return <Icon size={size} />;
+  return <Icon size={size} className={props.className} />;
 }

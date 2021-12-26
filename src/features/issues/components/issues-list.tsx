@@ -22,8 +22,8 @@ export function IssuesList(props: { title: string; issueType: IssueType }) {
   );
 
   return (
-    <div className="border-2 border-gray-800 rounded-md">
-      <div className="flex flex-row border-b-2 border-gray-800 px-4 py-2">
+    <div className="border-2 border-gray-200 dark:border-zinc-800 rounded-md">
+      <div className="flex flex-row border-b-2 border-gray-200 dark:border-zinc-800 px-4 py-2">
         <h3 className="font-bold">{props.title}</h3>
       </div>
       <ul>
