@@ -33,7 +33,7 @@ export async function signOut() {
   return nearWalletConnection.signOut();
 }
 
-export async function getAccountId() {
+export async function getAccountId(): Promise<string> {
   const nearWalletConnection = await initNearWalletConnection();
 
   return nearWalletConnection.getAccountId();
@@ -50,22 +50,21 @@ export async function initDaoContract() {
 }
 
 export async function addBounty(params: {
-  ghIssueNumber: number;
+  issueNumber: number;
   issueDescription: string;
   token: string;
   amount: string;
-  times: number;
   maxDeadline: number;
 }) {
   const daoContract = initDaoContract();
   const id = await (daoContract as any).add_proposal({
-    description: `Bounty created for GitHub issue #${params.ghIssueNumber}`,
+    description: `Bounty created for GitHub issue #${params.issueNumber}`,
     kind: {
       bounty: {
         description: params.issueDescription,
         token: params.token,
         amount: params.amount,
-        times: params.times,
+        times: 1,
         max_deadline: params.maxDeadline,
       },
     },

@@ -1,8 +1,5 @@
-import { postProposalHandler } from "../../features/api-routes/handlers/proposals";
-import {
-  ApiError,
-  apiErrorHandler,
-} from "../../features/api-routes/handlers/utils";
+import { postBountiesHandler } from "features/api-routes/handlers/bounties";
+import { ApiError, apiErrorHandler } from "features/api-routes/handlers/utils";
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
@@ -18,10 +15,10 @@ export default async function handler(
   try {
     switch (req.method) {
       /**
-       * `POST /proposal`
+       * `POST /bounties`
        */
       case "POST":
-        return postProposalHandler(req, res);
+        return postBountiesHandler(req, res);
       default:
         throw new ApiError(400, `Method ${req.method} not allowed`);
     }

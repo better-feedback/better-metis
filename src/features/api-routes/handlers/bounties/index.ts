@@ -9,20 +9,20 @@ import { ApiError } from "../utils";
 import type { NextApiRequest, NextApiResponse } from "next";
 
 /**
- * `POST /proposal`
+ * `POST /bounties`
  */
-export async function postProposalHandler(
+export async function postBountiesHandler(
   req: NextApiRequest,
   res: NextApiResponse<{
     message?: string;
     error?: any;
   }>
 ) {
-  const requiredPostBodyKeys = ["issueNumber", "chain", "proposalId"];
+  const requiredPostBodyKeys = ["issueNumber", "chain", "bountyId"];
   const postBody: {
     issueNumber: number;
     chain: string;
-    proposalId: number;
+    bountyId: number;
   } = req.body;
 
   Object.keys(postBody).forEach((postBodyKey) => {
@@ -43,11 +43,11 @@ export async function postProposalHandler(
 
   const updatedMetadata = {
     ...metadata,
-    chainProposals: [
-      ...metadata.chainProposals,
+    bounties: [
+      ...metadata.bounties,
       {
         chain: postBody.chain,
-        proposalId: postBody.proposalId,
+        bountyId: postBody.bountyId,
       },
     ],
   };

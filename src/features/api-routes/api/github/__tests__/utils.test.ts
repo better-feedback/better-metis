@@ -3,10 +3,10 @@ import * as githubUtils from "../utils";
 describe("github", () => {
   describe("#getMetadataAndClean()", () => {
     const metadata = {
-      chainProposals: [
+      bounties: [
         {
           chain: "near",
-          proposalId: 1,
+          bountyId: 1,
         },
       ],
     };
@@ -27,7 +27,7 @@ describe("github", () => {
       const { metadata: descriptionMetadata } =
         githubUtils.getMetadataAndCleanedComment(description);
       expect(descriptionMetadata).toMatchObject({
-        chainProposals: [],
+        bounties: [],
       });
     });
   });

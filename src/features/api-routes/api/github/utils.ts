@@ -8,7 +8,7 @@ export function getMetadataAndCleanedComment(comment: string): {
 } {
   const match = comment.match(metadataCommentRegex);
 
-  const metadata = match ? JSON.parse(match[1]) : { chainProposals: [] };
+  const metadata = match ? JSON.parse(match[1]) : { bounties: [] };
   const cleanedComment = comment.replace(metadataCommentRegex, "");
   return { cleanedComment, metadata };
 }
@@ -23,9 +23,9 @@ export function setMetadataComment(
 }
 
 export function buildMetadataInfoText(metadata: Metadata) {
-  let infoComment = `This issue has ${metadata.chainProposals.length} bounties.\n`;
-  for (const chainProposal of metadata.chainProposals) {
-    infoComment += `Chain: ${chainProposal.chain}, Proposal ID: ${chainProposal.proposalId}\n`;
+  let infoComment = `This issue has ${metadata.bounties.length} bounties.\n`;
+  for (const bounty of metadata.bounties) {
+    infoComment += `Chain: ${bounty.chain}, Bounty ID: ${bounty.bountyId}\n`;
   }
   return infoComment;
 }
