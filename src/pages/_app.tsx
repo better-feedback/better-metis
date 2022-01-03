@@ -1,15 +1,18 @@
+import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
+
 import "../styles/globals.css";
+
 import type { AppProps } from "next/app";
 
-const queryClient = new QueryClient();
+export default function App({ Component, pageProps }: AppProps) {
+  const [queryClient] = React.useState(() => new QueryClient());
 
-function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <Component {...pageProps} />
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }
-
-export default App;
