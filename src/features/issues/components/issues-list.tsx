@@ -1,8 +1,7 @@
 import React from "react";
-import { useQuery } from "react-query";
 
-import { getIssues } from "../api";
 import { IssuesListItem } from "./issues-list-item";
+import { useIssuesQuery } from "../hooks/useIssuesQueries";
 
 import type { IssueType } from "../types";
 
@@ -14,12 +13,7 @@ export function IssuesList(props: { title: string; issueType: IssueType }) {
     isLoading,
     isError,
     error,
-  } = useQuery(["issues", props.issueType], () =>
-    getIssues(props.issueType, {
-      page: 1,
-      perPage: 10,
-    })
-  );
+  } = useIssuesQuery(props.issueType, currentPage);
 
   return (
     <div className="border-2 border-gray-200 dark:border-zinc-800 rounded-md">

@@ -1,14 +1,15 @@
 import React from "react";
-import { useMutation } from "react-query";
+import { useRouter } from "next/router";
 
 import StatusLabel from "features/common/components/status-label";
 import Button from "features/common/components/button";
-import { addProposalToMetadataComment } from "../api";
+import { useWalletIsSignedInQuery } from "features/common/hooks/useWalletQueries";
 
-export default function IssueDetailsSidebar(props: { issueNumber: number }) {
-  const addProposalMutation = useMutation((chainProposal: any) =>
-    addProposalToMetadataComment(props.issueNumber, chainProposal)
-  );
+import type { Issue } from "../types";
+
+export default function IssueDetailsSidebar(props: { issue: Issue }) {
+  const router = useRouter();
+  const walletIsSignedInQuery = useWalletIsSignedInQuery();
 
   return (
     <aside>
@@ -18,16 +19,18 @@ export default function IssueDetailsSidebar(props: { issueNumber: number }) {
       <div className="flex justify-center pt-4">
         <Button
           onClick={() =>
-            addProposalMutation.mutate({
-              chain: "near",
-              proposalId: 1,
-            })
+            router.push(`/issues/${props.issue.number}/add-bounty`)
           }
-          disabled={addProposalMutation.isLoading}
+          disabled={!walletIsSignedInQuery.data}
         >
-          {addProposalMutation.isLoading ? "Adding..." : "Add Bounty"}
+          Add Bounty
         </Button>
       </div>
+      {!walletIsSignedInQuery.data && (
+        <p className="text-xs text-center mt-2 text-gray-500 dark:text-zinc-500">
+          You need to connect a wallet to add a bounty.
+        </p>
+      )}
     </aside>
   );
 }

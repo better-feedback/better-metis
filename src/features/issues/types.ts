@@ -1,9 +1,9 @@
 export type IssueType = "open" | "planned" | "inProgress";
 
 export type Metadata = {
-  chainProposals: {
+  bounties: {
     chain: string;
-    proposalId: number;
+    bountyId: number;
   }[];
 };
 

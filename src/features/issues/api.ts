@@ -20,17 +20,3 @@ export async function getIssueByNumber(issueNumber: number) {
   );
   return data.issue;
 }
-
-export async function addProposalToMetadataComment(
-  issueNumber: number,
-  chainProposal: {
-    chain: string;
-    proposalId: number;
-  }
-) {
-  return axios.post<any>(`/api/proposal`, {
-    issueNumber,
-    chain: chainProposal.chain,
-    proposalId: chainProposal.proposalId,
-  });
-}

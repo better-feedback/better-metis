@@ -1,21 +1,17 @@
-import { useQuery } from "react-query";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import { getIssueByNumber } from "../api";
 import IssueDetailsHeading from "./issue-details-heading";
 import IssueDetailsSidebar from "./issue-details-sidebar";
+
+import { useIssueDetailsQuery } from "../hooks/useIssuesQueries";
 
 export function IssueDetails(props: { issueNumber: number }) {
   const {
     data: issue,
     isLoading,
     isFetching,
-  } = useQuery(
-    ["issues", props.issueNumber],
-    () => getIssueByNumber(props.issueNumber),
-    { enabled: Boolean(props.issueNumber) }
-  );
+  } = useIssueDetailsQuery(props.issueNumber);
 
   console.log(issue);
 
@@ -39,7 +35,7 @@ export function IssueDetails(props: { issueNumber: number }) {
           </ReactMarkdown>
         </div>
       </div>
-      <IssueDetailsSidebar issueNumber={props.issueNumber} />
+      <IssueDetailsSidebar issue={issue} />
     </div>
   );
 }

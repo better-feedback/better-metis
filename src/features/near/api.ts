@@ -2,6 +2,8 @@ import * as nearApi from "near-api-js";
 
 import { nearChainConfig } from "config";
 
+import type { Token } from "features/tokens/types";
+
 export async function initNearWalletConnection() {
   const near = await nearApi.connect({
     networkId: nearChainConfig.networkId,
@@ -56,19 +58,33 @@ export async function addBounty(params: {
   amount: string;
   maxDeadline: number;
 }) {
-  const daoContract = initDaoContract();
-  const id = await (daoContract as any).add_proposal({
-    description: `Bounty created for GitHub issue #${params.issueNumber}`,
-    kind: {
-      bounty: {
-        description: params.issueDescription,
-        token: params.token,
-        amount: params.amount,
-        times: 1,
-        max_deadline: params.maxDeadline,
+  const daoContract = await initDaoContract();
+  console.log(daoContract);
+  const id = await (daoContract as any).add_proposal(
+    {
+      proposal: {
+        description: `Bounty created for GitHub issue #${params.issueNumber}`,
+        kind: {
+          AddBounty: {
+            bounty: {
+              // description: params.issueDescription,
+              // token: params.token,
+              // amount: params.amount,
+              // times: 1,
+              // max_deadline: params.maxDeadline,
+              description: "Test",
+              token: "",
+              amount: "123",
+              times: 1,
+              max_deadline: "1000000000000",
+            },
+          },
+        },
       },
     },
-  });
+    undefined,
+    1
+  );
   return id;
 }
 
@@ -86,4 +102,15 @@ export async function giveUpBounty() {
 
 export async function getBountyById(bountyId: number) {
   // TODO
+}
+
+export async function getTokens(): Promise<Token[]> {
+  return [
+    {
+      symbol: "NEAR",
+      address: "0x",
+      decimals: 18,
+      name: "Near Token",
+    },
+  ];
 }
