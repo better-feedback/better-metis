@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 import FormInput from "features/common/components/form-input";
 import LabeledInput from "features/common/components/labeled-input";
@@ -9,6 +9,7 @@ import Button from "features/common/components/button";
 import { useIssueDetailsQuery } from "features/issues/hooks/useIssuesQueries";
 import { useWalletChainQuery } from "features/common/hooks/useWalletQueries";
 import useAddBountyMutation from "../hooks/useAddBountyMutation";
+import { viewFunction } from "features/near/api";
 
 import type { Token } from "features/tokens/types";
 
@@ -17,6 +18,7 @@ export default function AddBounty(props: { issueNumber: number }) {
   const [amount, setAmount] = React.useState("");
   const [maxDeadline, setMaxDeadline] = React.useState("");
   const [areInputsValid, setAreInputsValid] = React.useState(false);
+  const [doesBountyExist, setDoesBountyExist] = React.useState(false);
 
   const { data: issue, isLoading } = useIssueDetailsQuery(props.issueNumber);
   const { data: walletChain = "" } = useWalletChainQuery();
@@ -31,23 +33,36 @@ export default function AddBounty(props: { issueNumber: number }) {
   ) {
     event.preventDefault();
 
-    if (!issue || !walletChain || !token || !amount || !maxDeadline) {
-      setAreInputsValid(false);
+    if (!issue || !walletChain || !token || !amount ) {
+      return setAreInputsValid(false);
     }
 
-    if (issue && walletChain && token && amount && maxDeadline) {
-      addBountyMutation.mutate({
-        issueNumber: issue.number,
-        issueDescription: "byebye",
-        chain: walletChain,
-        token: token.address,
-        maxDeadline: new Date(
-          new Date(maxDeadline).setUTCHours(23, 59, 59, 59)
-        ).getTime(),
-        amount,
-      });
-    }
+
+    addBountyMutation.mutate({
+      issueNumber: issue.number,
+      issueDescription: "byebye",
+      chain: walletChain,
+      token: token.address,
+      maxDeadline: maxDeadline
+        ? new Date(new Date(maxDeadline).setUTCHours(23, 59, 59, 59)).getTime()
+        : 0,
+      amount,
+    });
   }
+
+  useEffect(() => {
+
+    console.log("RUNNING")
+    if(!issue) return
+
+    viewFunction("getBountyByIssue", { issueId: issue?.number })
+      .then((res) => {
+        setDoesBountyExist(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [issue]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -82,16 +97,19 @@ export default function AddBounty(props: { issueNumber: number }) {
         <LabeledInput label="Created at">
           <div>{issue.number}</div>
         </LabeledInput>
-        <LabeledInput label="Max. deadline" className="col-span-4">
-          <FormInput
-            type="date"
-            value={maxDeadline}
-            min={0}
-            onChange={handleChangeMaxDeadline}
-            className="w-full"
-            required
-          />
-        </LabeledInput>
+        {!doesBountyExist && (
+          <LabeledInput label="Max. deadline" className="col-span-4">
+            <FormInput
+              type="date"
+              value={maxDeadline}
+              min={0}
+              onChange={handleChangeMaxDeadline}
+              className="w-full"
+              required
+            />
+          </LabeledInput>
+        )}
+
         <TokenAmountInput
           inputClassName="col-span-4"
           onChangeToken={setToken}
@@ -99,13 +117,16 @@ export default function AddBounty(props: { issueNumber: number }) {
           onChangeAmount={setAmount}
           amountValue={amount}
         />
-
         <Button
           className="w-full col-span-4 mt-4"
           onClick={handleClickAddBounty}
           disabled={addBountyMutation.isLoading}
         >
-          {addBountyMutation.isLoading ? "Creating bounty..." : "Create bounty"}
+          {addBountyMutation.isLoading
+            ? "Creating bounty..."
+            : doesBountyExist
+            ? "Fund Bounty"
+            : "Create bounty"}
         </Button>
       </form>
     </div>

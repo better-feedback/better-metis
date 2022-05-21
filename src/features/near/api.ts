@@ -51,41 +51,43 @@ export async function initDaoContract() {
   });
 }
 
+//Function for view methods
+export const viewFunction = async (functionName: string, args = {}) => {
+  const nearWalletConnection = await initNearWalletConnection();
+  const result = await nearWalletConnection
+    .account()
+    .viewFunction(nearChainConfig.daoId, functionName, args);
+
+  return result;
+};
+
+//Function for call method
+export const callFunction = async (
+  functionName: string,
+  args = {},
+  deposit = "0"
+) => {
+  const nearWalletConnection = await initNearWalletConnection();
+  const result = await nearWalletConnection.account().functionCall({
+    contractId: nearChainConfig.daoId,
+    methodName: functionName,
+    args: args,
+    attachedDeposit: nearApi.utils.format.parseNearAmount(deposit),
+  });
+  return result;
+};
+
 export async function addBounty(params: {
   issueNumber: number;
-  issueDescription: string;
-  token: string;
-  amount: string;
+  amount: number;
   maxDeadline: number;
 }) {
-  const daoContract = await initDaoContract();
-  console.log(daoContract);
-  const id = await (daoContract as any).add_proposal(
-    {
-      proposal: {
-        description: `Bounty created for GitHub issue #${params.issueNumber}`,
-        kind: {
-          AddBounty: {
-            bounty: {
-              // description: params.issueDescription,
-              // token: params.token,
-              // amount: params.amount,
-              // times: 1,
-              // max_deadline: params.maxDeadline,
-              description: "Test",
-              token: "",
-              amount: "123",
-              times: 1,
-              max_deadline: "1000000000000",
-            },
-          },
-        },
-      },
-    },
-    undefined,
-    1
-  );
-  return id;
+  
+  callFunction("fundBounty", {"issueId" : params.issueNumber , "deadline" : params.maxDeadline.toString()} , params.amount.toString()).then((response) => {
+    console.log("Fund response", response);
+  }).catch((error) => {
+    console.log("Fund Error" , error);
+  });
 }
 
 export async function claimBounty() {
