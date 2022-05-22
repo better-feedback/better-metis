@@ -8,7 +8,7 @@ import { useWalletIsSignedInQuery } from "features/common/hooks/useWalletQueries
 import { utils } from "near-api-js";
 
 import type { Issue } from "../types";
-import { viewFunction } from "features/near/api";
+import { viewFunction, callFunction } from "features/near/api";
 
 export default function IssueDetailsSidebar(props: { issue: Issue }) {
   const router = useRouter();
@@ -16,6 +16,9 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
 
   const [bounty, setBounty] = useState(null);
 
+  /* A hook that is called when the component is mounted. 
+  In order to fetch the bounty stored in the contract
+ */
   useEffect(() => {
     if (!props.issue) return;
     viewFunction("getBountyByIssue", { issueId: props.issue.number })
@@ -46,13 +49,13 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
           <div className="flex gap-2 flex-wrap">
             {!bounty
               ? "-"
-              : bounty.funders.map((funder : string) => {
+              : bounty.funders.map((funder: string) => {
                   return <span key={funder}>{funder}</span>;
                 })}
           </div>
         }
       />
-      <div className="flex justify-center pt-4">
+      <div className="flex flex-col gap-y-4 justify-center pt-4">
         <Button
           onClick={() =>
             router.push(`/issues/${props.issue.number}/add-bounty`)
@@ -60,6 +63,22 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
           disabled={!walletIsSignedInQuery.data}
         >
           Add Bounty
+        </Button>
+
+        <Button
+          onClick={() =>
+            /* Calling the startWork function in the contract. */
+            callFunction("startWork", { issueId: props.issue.number })
+              .then(() => {
+                alert("Successfully started working on the bounty");
+              })
+              .catch((error) => {
+                alert(error);
+              })
+          }
+          disabled={!bounty || !walletIsSignedInQuery.data}
+        >
+          Start Work
         </Button>
       </div>
       {!walletIsSignedInQuery.data && (
