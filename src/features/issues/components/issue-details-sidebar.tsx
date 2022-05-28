@@ -63,7 +63,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
           <div>
             {!bounty
               ? "-"
-              : utils.format.formatNearAmount(bounty.pool) + " Near"}{" "}
+              : pool + " Near"}{" "}
             - ${poolInDollars}
           </div>
         }

@@ -25,8 +25,13 @@ export async function signIn() {
 
 export async function isSignedIn() {
   const nearWalletConnection = await initNearWalletConnection();
+  let bool = await nearWalletConnection.isSignedIn();
+  return bool;
+}
 
-  return nearWalletConnection.isSignedIn();
+export async function returnWallet() {
+  const nearWalletConnection = await initNearWalletConnection();
+  return nearWalletConnection;
 }
 
 export async function signOut() {
