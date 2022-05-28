@@ -4,7 +4,7 @@ export const githubConfig = {
   labels: {
     open: "bug",
     planned: "planned",
-    inProgress: "in progress",
+    inProgress: "inProgress",
   },
 
   // secret
