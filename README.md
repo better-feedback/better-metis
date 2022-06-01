@@ -1,6 +1,6 @@
 # Better
 
-## Setting up Better (work in progress)
+### Setting up Better (work in progress)
 
 Better automatically mirrors your Github issues to a hosted website, which allows your community to vote on them, fund them as bounties and claim the funds for implementing them. Issues might be anything from feature requests, to DAO proposals or content marketing ideas.
 
