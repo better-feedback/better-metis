@@ -27,7 +27,7 @@ export default function AddBounty(props: { issueNumber: number }) {
   const router = useRouter();
 
   useEffect(() => {
-    let issueNumber = window.location.pathname.split("/")[2]
+    let issueNumber = window.location.pathname.split("/")[2];
     if (!walletChain) {
       router.replace(`/issues/${issueNumber}`);
     }
@@ -46,6 +46,8 @@ export default function AddBounty(props: { issueNumber: number }) {
       return setAreInputsValid(false);
     }
 
+    localStorage.setItem("isBountyAdded", "true");
+
     addBountyMutation.mutate({
       issueNumber: issue.number,
       issueDescription: "byebye",
@@ -57,6 +59,14 @@ export default function AddBounty(props: { issueNumber: number }) {
       amount,
     });
   }
+
+  useEffect(() => {
+    const isBountyAdded = localStorage.getItem("isBountyAdded");
+    if (isBountyAdded === "true") {
+      localStorage.removeItem("isBountyAdded");
+      router.replace(`/issues/${props.issueNumber}`);
+    }
+  }, []);
 
   useEffect(() => {
     /* Checking if the issue exists. */
