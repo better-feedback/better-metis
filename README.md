@@ -1,45 +1,46 @@
 # Better
 
-## Setting up Better (work in progress)
+## How to submit your idea
 
-Better automatically mirrors your Github issues to a hosted website, which allows your community to vote on them, fund them as bounties and claim the funds for implementing them. Issues might be anything from feature requests, to DAO proposals or content marketing ideas.
+Visit [/better-app/issues](https://github.com/better-feedback/better-app/issues) and add a new issue.
 
-Setting up your own Better project takes only two steps:
+To list your issue on your Better board, tag the issue category as `bug` or `feature` and its status as `open`, `planned` or `inProgress`.
 
-### Fork me
+Your issue should now appear on [better.betterhq.org](https://better.betterhq.org/).
 
-Start by forking this repository.
+You can now
 
-### Host the page
+👉 login with Discord and vote on your favorite issue
 
-Next, set up your hosted page under your own URL:
+👉 add funds to the issue to start a bounty
 
-1. ...
-2. Vercel
-3. Set DNS
-4. Set env variables
-    a. ...
-    b. ...
-5. ...
+👉 work on a bounty and claim the bounty pool once finished.
 
-### Creating an issue
+---
 
-Create a new issue at https://github.com/better-feedback/better-app/issues.
+## How to set up Better for your organization
 
-### Managing an issue
+Better mirrors your [Github issues](https://github.com/better-feedback/better-app/issues) to a [hosted website](https://better.betterhq.org/), which allows your community to vote on them, fund them as bounties and claim the pooled funds for implementing them. Issues could range from feature requests, to DAO proposals or content marketing ideas.
 
-You can set an issues state in Github. To list an issue on your site's board, tag the issue as ... and it should appear in the "open" tab.
+Setting up your own Better project takes a few steps:
 
-These are the options:
+- Fork the [Better repo](https://github.com/better-feedback/better-app)
+- Set up [Vercel]([url](https://vercel.com/))
+    - Add a new project, linking to your forked repo
+     - Set your ENV variables (Ask us on [Discord](https://discord.com/invite/wwwwRFa6aj)!)
 
-- ...
-- ...
+After a succesfful deployment, point your vercel deployment to your custom URL, eg. feedback.yourdapp.com, roadmap.yourdapp.com, bounties.yourdapp.com
 
-### Questions & Suggestions
+- Copy your DNS info at `https://vercel.com/[yourproject]/[yourrepo]/settings/domains`
+- Add the info in your domain manager interface
 
-[Join our discord chat](https://discord.com/invite/wwwwRFa6aj) and let us know about your questions or suggestions :)
+🎊 Congratulations, you just deployed your custom Better site 🎉
 
-## Customizing Better aka Development
+You want to customize your site UI or got feature ideas for Better? Join our [Discord](https://discord.com/invite/wwwwRFa6aj) and let us know!
+
+---
+
+### Dev
 
 Checkout the repo and set the required environmental variables by copying `./.env.example` into `./.env.local`.
 
