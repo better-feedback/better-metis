@@ -26,7 +26,6 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
   const [poolInDollars, setPoolInDollars] = useState<string>("");
   const [isApplyingToWork, setIsApplyingToWork] = useState(false);
 
-  console.log(walledId);
 
   const loadBountyDetails = () => {
     viewFunction("getBountyByIssue", { issueId: props.issue.url })

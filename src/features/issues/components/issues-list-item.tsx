@@ -21,7 +21,7 @@ export function IssuesListItem(props: Props) {
             </div>
             <div className="flex gap-2 flex-wrap mt-1">
               {issue?.labels.map((label: Label) => {
-                console.log(`color : #`);
+
                 return (
                   <div
                     key={label.id}

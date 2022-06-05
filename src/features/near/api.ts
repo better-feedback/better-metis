@@ -89,7 +89,6 @@ export async function addBounty(params: {
 }) {
   
   callFunction("fundBounty", {"issueId" : params.issueNumber , "deadline" : params.maxDeadline.toString()} , params.amount.toString()).then((response) => {
-    console.log("Fund response", response);
   }).catch((error) => {
     console.log("Fund Error" , error);
   });
