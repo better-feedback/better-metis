@@ -7,12 +7,19 @@ export type Metadata = {
   }[];
 };
 
+export interface Label {
+  name: string;
+  id: number;
+  color: string;
+}
+
 export type Issue = {
   title: string;
   metadata: Metadata;
   created_at: string;
   number: number;
   body: string;
+  labels: Label[];
   user: {
     login: string;
   };

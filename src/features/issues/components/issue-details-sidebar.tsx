@@ -12,6 +12,7 @@ import { utils } from "near-api-js";
 
 import type { Issue } from "../types";
 import { viewFunction, callFunction } from "features/near/api";
+import {parseDate} from "../../../utils/helpers.js"
 
 export default function IssueDetailsSidebar(props: { issue: Issue }) {
   const router = useRouter();
@@ -22,6 +23,8 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
   const [pool, setPool] = useState("");
   const [poolInDollars, setPoolInDollars] = useState<string>("");
   const [isApplyingToWork, setIsApplyingToWork] = useState(false);
+
+  
 
   const loadBountyDetails = () => {
     viewFunction("getBountyByIssue", { issueId: props.issue.url })
@@ -68,6 +71,14 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
         content={
           <div>
             {!bounty ? "-" : pool + " Near"} - ${poolInDollars}
+          </div>
+        }
+      />
+      <SidebarItem
+        title="Deadline"
+        content={
+          <div>
+            {parseDate(bounty.deadline)}
           </div>
         }
       />
