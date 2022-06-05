@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 
 import type { Token } from "features/tokens/types";
 
+
 export default function AddBounty(props: { issueNumber: number }) {
   const [token, setToken] = React.useState<Token | null>(null);
   const [amount, setAmount] = React.useState("");

@@ -19,6 +19,7 @@ export type Issue = {
   created_at: string;
   number: number;
   body: string;
+  url: string;
   labels: Label[];
   user: {
     login: string;

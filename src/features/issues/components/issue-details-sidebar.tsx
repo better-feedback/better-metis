@@ -11,20 +11,22 @@ import {
 import { utils } from "near-api-js";
 
 import type { Issue } from "../types";
+import type { Bounty } from "../../bounties/types";
 import { viewFunction, callFunction } from "features/near/api";
-import {parseDate} from "../../../utils/helpers.js"
+import { parseDate } from "../../../utils/helpers.js";
+import { QueryObserverIdleResult } from "react-query";
 
 export default function IssueDetailsSidebar(props: { issue: Issue }) {
   const router = useRouter();
   const walletIsSignedInQuery = useWalletIsSignedInQuery();
   const walledId = useWalletSignedInAccountQuery();
 
-  const [bounty, setBounty] = useState(null);
+  const [bounty, setBounty] = useState<Bounty | null>(null);
   const [pool, setPool] = useState("");
   const [poolInDollars, setPoolInDollars] = useState<string>("");
   const [isApplyingToWork, setIsApplyingToWork] = useState(false);
 
-  
+  console.log(walledId);
 
   const loadBountyDetails = () => {
     viewFunction("getBountyByIssue", { issueId: props.issue.url })
@@ -74,14 +76,12 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
           </div>
         }
       />
-      <SidebarItem
-        title="Deadline"
-        content={
-          <div>
-            {parseDate(bounty.deadline)}
-          </div>
-        }
-      />
+      {bounty && (
+        <SidebarItem
+          title="Deadline"
+          content={<div>{parseDate(bounty?.deadline)}</div>}
+        />
+      )}
       <SidebarItem
         title="Funders"
         content={
@@ -122,7 +122,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
           disabled={
             !bounty ||
             !walletIsSignedInQuery.data ||
-            bounty?.workers?.includes(walledId.data)
+            bounty?.workers?.includes(walledId?.data)
           }
         >
           {isApplyingToWork ? "Loading..." : "Start Work"}
