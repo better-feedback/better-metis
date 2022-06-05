@@ -49,7 +49,7 @@ export default function AddBounty(props: { issueNumber: number }) {
     localStorage.setItem("isBountyAdded", "true");
 
     addBountyMutation.mutate({
-      issueNumber: issue.number,
+      issueNumber: issue.url,
       issueDescription: "byebye",
       chain: walletChain,
       token: token.address,
@@ -73,7 +73,7 @@ export default function AddBounty(props: { issueNumber: number }) {
     if (!issue) return;
 
     /* Getting bounty details for the issue */
-    viewFunction("getBountyByIssue", { issueId: issue?.number })
+    viewFunction("getBountyByIssue", { issueId: issue?.url })
       .then((res) => {
         setDoesBountyExist(res);
       })

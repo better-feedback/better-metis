@@ -24,7 +24,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
   const [isApplyingToWork, setIsApplyingToWork] = useState(false);
 
   const loadBountyDetails = () => {
-    viewFunction("getBountyByIssue", { issueId: props.issue.number })
+    viewFunction("getBountyByIssue", { issueId: props.issue.url })
       .then((res) => {
         setBounty(res);
         setPool(utils.format.formatNearAmount(res?.pool));
