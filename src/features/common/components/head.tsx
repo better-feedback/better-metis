@@ -23,14 +23,14 @@ export function CustomHead(props: Props) {
       <meta property="og:url" content={config.site.url}/>
       <meta property="og:title" content={config.site.title}/>
       <meta property="og:description" content={config.site.metaDescription}/>
-      <meta property="og:image" content="/metaBanner.png"/>
+      <meta property="og:image" content="https://pbs.twimg.com/profile_banners/1358751835285295104/1654107585/1500x500"/>
 
       {/* Twitter */}
       <meta property="twitter:card" content="summary_large_image"/>
       <meta property="twitter:url" content={config.site.url}/>
       <meta property="twitter:title" content={config.site.title}/>
       <meta property="twitter:description" content={config.site.metaDescription}/>
-      <meta property="twitter:image" content="/metaBanner.png"/>
+      <meta property="twitter:image" content="https://pbs.twimg.com/profile_banners/1358751835285295104/1654107585/1500x500"/>
 
       <link rel="icon" href="/favicon.ico" />
     </Head>
