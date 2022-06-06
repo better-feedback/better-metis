@@ -27,6 +27,7 @@ export const siteConfig = {
   title: "Better Roadmap",
   metaDescription: "Better Roadmap",
   url: "https://roadmap.betterhq.org/",
+  metaImg: ".../public/metaTagImg.jpg",
   externalLinks: {
     docs: "https://github.com/better-feedback/better-app#readme",
     discord: "wwwwRFa6aj",
