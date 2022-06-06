@@ -11,7 +11,7 @@ type Props = {
 export function IssuesListItem(props: Props) {
   const { issue } = props;
   return (
-    <li className="py-2 px-4 hover:bg-gray-200 dark:hover:bg-zinc-700 cursor-pointer overlow">
+    <li className="py-2 px-4 hover:bg-zinc-800 cursor-pointer overlow">
       <Link passHref href={`/issues/${issue.number}`}>
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col">
@@ -25,7 +25,7 @@ export function IssuesListItem(props: Props) {
                 return (
                   <div
                     key={label.id}
-                    className={`p-1 rounded-lg border-2 border-gray-500 bg-transparent text-gray-500 hover:brightness-150`}
+                    className={`inline-flex items-center justify-center px-2 border-2 border-zinc-800 rounded-md bg-transparent text-gray-500`}
                   >
                     <span className={`text-sm`}>{label.name}</span>
                   </div>
