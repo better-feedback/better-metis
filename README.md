@@ -1,6 +1,5 @@
 # Better
 
-
 ## How to submit your idea
 
 Visit [/better-app/issues](https://github.com/better-feedback/better-app/issues) and add a new issue.

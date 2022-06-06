@@ -3,7 +3,7 @@ import config from "config";
 const BETTER_LINKS = [
   {
     label: "Homepage",
-    link: config.site.externalLinks.homepage,
+    link: config.site.url,
   },
   {
     label: "Documentation",
@@ -22,7 +22,7 @@ const BETTER_LINKS = [
 const EXTERNAL_LINKS = [
   {
     label: "Homepage",
-    link: config.site.externalLinks.homepage,
+    link: config.site.url,
   },
 ];
 

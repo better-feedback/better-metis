@@ -24,9 +24,10 @@ export const nearChainConfig = {
 export const siteConfig = {
   enabledChains: ["near"],
   projectName: "Better",
-  title: "Better",
+  title: "Better Roadmap",
+  metaDescription: "Better Roadmap",
+  url: "https://roadmap.betterhq.org/",
   externalLinks: {
-    homepage: "",
     docs: "https://github.com/better-feedback/better-app#readme",
     discord: "wwwwRFa6aj",
     twitter: "betterdao",
