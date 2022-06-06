@@ -23,14 +23,14 @@ export function CustomHead(props: Props) {
       <meta property="og:url" content={config.site.url}/>
       <meta property="og:title" content={config.site.title}/>
       <meta property="og:description" content={config.site.metaDescription}/>
-      <meta property="og:image" content=".public/metaTagImg.jpg"/>
+      <meta property="og:image" content="./public/metaTagImg.jpg"/>
 
       {/* Twitter */}
       <meta property="twitter:card" content="summary_large_image"/>
       <meta property="twitter:url" content={config.site.url}/>
       <meta property="twitter:title" content={config.site.title}/>
       <meta property="twitter:description" content={config.site.metaDescription}/>
-      <meta property="twitter:image" content=".public/metaTagImg.jpg"/>
+      <meta property="twitter:image" content="./public/metaTagImg.jpg"/>
 
       <link rel="icon" href="/favicon.ico" />
     </Head>
