@@ -30,12 +30,14 @@ Setting up your own Better project takes a few steps:
     - Add a new project, linking to your forked repo
      - Set your ENV variables (Ask us on [Discord](https://discord.com/invite/wwwwRFa6aj)!)
 
-After a succesfful deployment, point your vercel deployment to your custom URL, eg. feedback.yourdapp.com, roadmap.yourdapp.com, bounties.yourdapp.com
+After a successful deployment, point your vercel deployment to your custom URL, eg. feedback.yourdapp.com, roadmap.yourdapp.com, bounties.yourdapp.com
 
 - Copy your DNS info at `https://vercel.com/[yourproject]/[yourrepo]/settings/domains`
 - Add the info in your domain manager interface
 
 🎊 Congratulations, you just deployed your custom Better site 🎉
+
+To customize the project name and footer links, edit the variables in `\better-app\src\config.ts`.
 
 You want to customize your site UI or got feature ideas for Better? Join our [Discord](https://discord.com/invite/wwwwRFa6aj) and let us know!
 

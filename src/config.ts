@@ -27,7 +27,9 @@ export const siteConfig = {
   title: "Better",
   externalLinks: {
     homepage: "",
-    docs: "",
+    docs: "https://github.com/better-feedback/better-app#readme",
+    discord: "wwwwRFa6aj",
+    twitter: "betterdao",
   },
 };
 
