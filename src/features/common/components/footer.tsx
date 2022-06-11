@@ -24,6 +24,10 @@ const EXTERNAL_LINKS = [
     label: "Homepage",
     link: config.site.url,
   },
+  {
+    label: "GitHub",
+    link: `https://github.com/${config.github.repoOwner}/${config.github.repoName}`,
+  },
 ];
 
 export function Footer() {
