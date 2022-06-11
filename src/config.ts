@@ -2,9 +2,9 @@ export const githubConfig = {
   repoOwner: process.env.NEXT_PUBLIC_REPO_OWNER || "",
   repoName: process.env.NEXT_PUBLIC_REPO_NAME || "",
   labels: {
-    open: ["bug", "feature", "open"],
-    planned: ["planned"],
+    open: ["open"],
     inProgress: ["inProgress"],
+    live: ["live"],
   },
 
   // secret
