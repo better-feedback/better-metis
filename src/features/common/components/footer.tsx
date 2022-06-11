@@ -25,8 +25,8 @@ const EXTERNAL_LINKS = [
     link: config.site.url,
   },
   {
-    label: "GitHub",
-    link: `https://github.com/${config.github.repoOwner}/${config.github.repoName}`,
+    label: "Add new issue",
+    link: `https://github.com/${config.github.repoOwner}/${config.github.repoName}/issues/new/choose`,
   },
 ];
 
