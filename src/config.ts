@@ -3,8 +3,8 @@ export const githubConfig = {
   repoName: process.env.NEXT_PUBLIC_REPO_NAME || "",
   labels: {
     open: ["open"],
-    planned: ["planned"],
     inProgress: ["inProgress"],
+    live: ["live"],
   },
 
   // secret
