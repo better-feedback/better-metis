@@ -25,7 +25,7 @@ export function IssuesListItem(props: Props) {
                 return (
                   <div
                     key={label.id}
-                    className={`inline-flex items-center justify-center px-2 border-2 border-zinc-800 rounded-md bg-transparent text-gray-500`}
+                    className={`inline-flex items-center justify-center px-2 border-2 border-gray-200 dark:border-zinc-800 rounded-md bg-transparent text-gray-500`}
                   >
                     <span className={`text-sm`}>{label.name}</span>
                   </div>
