@@ -41,7 +41,8 @@ export default async function handler(
 
         const { id, body } = await getMetadataCommentId(parseInt(issueNumber));
 
-        if (!body || !body.includes("vote")) res.status(200).json({ votes: 0 });
+        if (!body || !body.includes("vote"))
+          return res.status(200).json({ votes: 0 });
 
         const { metadata, cleanedComment } = getMetadataAndCleanedComment(body);
 

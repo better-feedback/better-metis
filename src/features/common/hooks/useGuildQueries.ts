@@ -1,4 +1,5 @@
 import { guild } from "@guildxyz/sdk";
+import axios from "axios";
 import { useQuery } from "react-query";
 import { nearAccountToHex } from "utils/helpers";
 import { chainsToApi } from "../constants";
@@ -40,8 +41,11 @@ export function useVotingAccessQuery() {
   });
 }
 
-export function useIssueVoteCount() {
-  return useQuery("issueVoteCount", async () => {
-    
-  })
+export function useIssueVoteCount(issueNumber: number) {
+  return useQuery(["issueVoteCount", issueNumber], async () => {
+    const result = await axios.get(
+      `/api/comment/getVoteCount?issueNumber=${issueNumber}`
+    );
+    return result.data;
+  });
 }

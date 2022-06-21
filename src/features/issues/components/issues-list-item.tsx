@@ -8,7 +8,10 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import { useWalletSignedInAccountQuery } from "features/common/hooks/useWalletQueries";
 
-import { useVotingAccessQuery } from "features/common/hooks/useGuildQueries";
+import {
+  useVotingAccessQuery,
+  useIssueVoteCount,
+} from "features/common/hooks/useGuildQueries";
 import { upsertMetadataComment } from "features/api-routes/api/github";
 
 import { Octokit } from "octokit";
@@ -16,16 +19,16 @@ import config from "config";
 
 const octokit = new Octokit({ auth: config.github.pat });
 
-
 type Props = {
   issue: Issue;
 };
 
 export function IssuesListItem(props: Props) {
+  const { issue } = props;
   const signedInAccountQuery = useWalletSignedInAccountQuery();
   const canVote = useVotingAccessQuery();
+  const { data } = useIssueVoteCount(issue.number);
 
-  const { issue } = props;
   return (
     <li className="py-2 px-4 dark:hover:bg-zinc-800 hover:bg-gray-200 cursor-pointer overlow flex justify-between ">
       <Link passHref href={`/issues/${issue.number}`}>
@@ -54,20 +57,19 @@ export function IssuesListItem(props: Props) {
       </Link>
 
       <div className="flex flex-col justify-center items-center ">
-        <span>0</span>
+        <span>{data?.votes}</span>
         <IoIosArrowUp
           className="text-[1.5rem] opacity-50 transition-all duration-300 hover:opacity-100"
           onClick={async (e) => {
             e.stopPropagation();
             if (!signedInAccountQuery) return alert("You need to be signed in");
             if (!canVote.data) return alert("You don't have access to vote");
-            try{
-
+            try {
               await upsertMetadataComment({
                 metadataCommentBody: `Votes = 2`,
                 issueNumber: issue.number,
               });
-            }catch(e){
+            } catch (e) {
               console.error(e);
             }
           }}
