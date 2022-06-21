@@ -29,20 +29,23 @@ export default async function handler(
        * `GET /issues/:issueNumber`
        */
       case "GET":
-        const octoKit = new Octokit({ auth: process.env.GITHUB_PAT });
         if (
           !process.env.NEXT_PUBLIC_REPO_OWNER ||
           !process.env.NEXT_PUBLIC_REPO_NAME
         )
           return res.status(500).send("Missing environment variables");
 
-        const issueNumber = req.query.issueNumber;
+        const { issueNumber } = req.query;
 
-        console.log(issueNumber);
+        if (!issueNumber) return res.status(400).send("Missing issue number");
 
-        // const { id, body } = await getMetadataCommentId(issueNumber);
+        const { id, body } = await getMetadataCommentId(parseInt(issueNumber));
 
-        return res.status(200).send("Success");
+        if (!body || !body.includes("vote")) res.status(200).json({ votes: 0 });
+
+        const { metadata, cleanedComment } = getMetadataAndCleanedComment(body);
+
+        return res.status(200).json(metadata?.votes ? metadata : { votes: 0 });
       default:
         throw new ApiError(400, `Method ${req.method} not allowed`);
     }
