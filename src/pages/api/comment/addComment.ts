@@ -37,11 +37,13 @@ export default async function handler(
         )
           return res.status(500).send("Missing environment variables");
 
+        /* Destructuring the request body and then getting the metadata comment id. */
         const { issueNumber, isUpVote } = req.body;
 
         const { id, body } = await getMetadataCommentId(issueNumber);
 
-        if (!id || !body) {
+        /* This is creating a new comment with the metadata if matadata doesnt exist already. */
+        if (!id || !body || !body.includes("vote")) {
           const commentBody = setMetadataComment(
             `This issue has ${isUpVote ? "1" : "-1"} votes`,
             {
@@ -55,7 +57,8 @@ export default async function handler(
             issue_number: issueNumber,
             body: commentBody,
           });
-        } else {
+        }/* This is updating the comment with the new vote count. */
+         else {
           const { metadata, cleanedComment } =
             getMetadataAndCleanedComment(body);
 

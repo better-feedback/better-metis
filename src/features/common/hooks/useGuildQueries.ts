@@ -4,6 +4,10 @@ import { useQuery } from "react-query";
 import { nearAccountToHex } from "utils/helpers";
 import { chainsToApi } from "../constants";
 
+/*
+ * It checks if the user has access to vote or not
+ * @returns A boolean value
+ */
 export function useVotingAccessQuery() {
   const walletChain = window.localStorage.getItem("wallet-chain");
 
@@ -41,8 +45,14 @@ export function useVotingAccessQuery() {
   });
 }
 
+/*
+ * It returns the number of votes for a given issue
+ * @param {number} issueNumber - The issue number of the issue we want to get the vote count for.
+ * @returns The result of the query.
+ */
 export function useIssueVoteCount(issueNumber: number) {
   return useQuery(["issueVoteCount", issueNumber], async () => {
+    /* Making a request to the backend to get the vote count for a given issue. */
     const result = await axios.get(
       `/api/comment/getVoteCount?issueNumber=${issueNumber}`
     );

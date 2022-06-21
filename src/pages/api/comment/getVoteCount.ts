@@ -25,9 +25,6 @@ export default async function handler(
 ) {
   try {
     switch (req.method) {
-      /**
-       * `GET /issues/:issueNumber`
-       */
       case "GET":
         if (
           !process.env.NEXT_PUBLIC_REPO_OWNER ||
@@ -35,6 +32,8 @@ export default async function handler(
         )
           return res.status(500).send("Missing environment variables");
 
+        /* Getting the issue number from the query string and then getting the metadata comment id from
+       the issue number. */
         const { issueNumber } = req.query;
 
         if (!issueNumber) return res.status(400).send("Missing issue number");
@@ -44,6 +43,7 @@ export default async function handler(
         if (!body || !body.includes("vote"))
           return res.status(200).json({ votes: 0 });
 
+       /* Destructuring the metadata and cleanedComment from the getMetadataAndCleanedComment function. */
         const { metadata, cleanedComment } = getMetadataAndCleanedComment(body);
 
         return res.status(200).json(metadata?.votes ? metadata : { votes: 0 });
