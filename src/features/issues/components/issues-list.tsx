@@ -15,6 +15,9 @@ export function IssuesList(props: { title: string; issueType: IssueType }) {
     error,
   } = useIssuesQuery(props.issueType, currentPage);
 
+
+  
+
   return (
     <div className="border-2 border-gray-200 dark:border-zinc-800 rounded-md">
       <div className="flex flex-row border-b-2 border-gray-200 dark:border-zinc-800 px-4 py-2">

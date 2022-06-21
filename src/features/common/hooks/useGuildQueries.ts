@@ -24,7 +24,7 @@ export function useVotingAccessQuery() {
       //Getting role id by chain
       const roleId: string =
         walletChain === "near"
-          ? process.env.NEXT_PUBLIC_NEAR_ID
+          ? process.env.NEXT_PUBLIC_NEAR_ROLE_ID
           : process.env.NEXT_PUBLIC_ROLE_ID;
 
       let canVote: boolean = false;
@@ -38,4 +38,10 @@ export function useVotingAccessQuery() {
       return canVote;
     });
   });
+}
+
+export function useIssueVoteCount() {
+  return useQuery("issueVoteCount", async () => {
+    
+  })
 }

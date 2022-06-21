@@ -9,6 +9,13 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { useWalletSignedInAccountQuery } from "features/common/hooks/useWalletQueries";
 
 import { useVotingAccessQuery } from "features/common/hooks/useGuildQueries";
+import { upsertMetadataComment } from "features/api-routes/api/github";
+
+import { Octokit } from "octokit";
+import config from "config";
+
+const octokit = new Octokit({ auth: config.github.pat });
+
 
 type Props = {
   issue: Issue;
@@ -50,11 +57,19 @@ export function IssuesListItem(props: Props) {
         <span>0</span>
         <IoIosArrowUp
           className="text-[1.5rem] opacity-50 transition-all duration-300 hover:opacity-100"
-          onClick={(e) => {
+          onClick={async (e) => {
             e.stopPropagation();
             if (!signedInAccountQuery) return alert("You need to be signed in");
             if (!canVote.data) return alert("You don't have access to vote");
-            alert("You can vote");
+            try{
+
+              await upsertMetadataComment({
+                metadataCommentBody: `Votes = 2`,
+                issueNumber: issue.number,
+              });
+            }catch(e){
+              console.error(e);
+            }
           }}
         />
         <IoIosArrowDown

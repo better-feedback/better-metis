@@ -4,3 +4,7 @@ export type Metadata = {
     bountyId: number;
   }[];
 };
+
+export type CommentMatadata = {
+  votes : number;
+}
