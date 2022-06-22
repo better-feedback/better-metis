@@ -11,6 +11,7 @@ import { useWalletSignedInAccountQuery } from "features/common/hooks/useWalletQu
 import {
   useVotingAccessQuery,
   useIssueVoteCount,
+  useVote,
 } from "features/common/hooks/useGuildQueries";
 import { upsertMetadataComment } from "features/api-routes/api/github";
 
@@ -27,6 +28,7 @@ export function IssuesListItem(props: Props) {
   const { issue } = props;
   const signedInAccountQuery = useWalletSignedInAccountQuery();
   const canVote = useVotingAccessQuery();
+  const addVote = useVote();
   const { data } = useIssueVoteCount(issue.number);
 
   return (
@@ -65,9 +67,9 @@ export function IssuesListItem(props: Props) {
             if (!signedInAccountQuery) return alert("You need to be signed in");
             if (!canVote.data) return alert("You don't have access to vote");
             try {
-              await upsertMetadataComment({
-                metadataCommentBody: `Votes = 2`,
+              addVote.mutate({
                 issueNumber: issue.number,
+                isUpVote: true,
               });
             } catch (e) {
               console.error(e);
@@ -79,6 +81,14 @@ export function IssuesListItem(props: Props) {
             e.stopPropagation();
             if (!signedInAccountQuery) return alert("You need to be signed in");
             if (!canVote.data) return alert("You don't have access to vote");
+            try {
+              addVote.mutate({
+                issueNumber: issue.number,
+                isUpVote: false,
+              });
+            } catch (e) {
+              console.error(e);
+            }
           }}
           className="text-[1.5rem] opacity-50 transition-all duration-300 hover:opacity-100"
         />

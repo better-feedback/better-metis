@@ -1,6 +1,6 @@
 import { guild } from "@guildxyz/sdk";
 import axios from "axios";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { nearAccountToHex } from "utils/helpers";
 import { chainsToApi } from "../constants";
 
@@ -58,4 +58,29 @@ export function useIssueVoteCount(issueNumber: number) {
     );
     return result.data;
   });
+}
+
+export function useVote() {
+  const queryClient = useQueryClient();
+
+  const addVoteMutation = useMutation(
+    async (params: { issueNumber: number; isUpVote: boolean }) => {
+      const result = await axios.post("/api/comment/addComment", {
+        issueNumber: params.issueNumber,
+        isUpVote: params.isUpVote,
+      });
+      return result.data;
+    },
+    {
+      onSuccess: (data, variables) => {
+        queryClient.invalidateQueries([
+          "issueVoteCount",
+          variables.issueNumber,
+        ]);
+      },
+    }
+  );
+
+
+  return addVoteMutation
 }
