@@ -61,7 +61,10 @@ export function IssuesListItem(props: Props) {
       <div className="flex flex-col justify-center items-center ">
         <span>{data?.votes}</span>
         <IoIosArrowUp
-          className="text-[1.5rem] opacity-50 transition-all duration-300 hover:opacity-100"
+          className={`text-[1.5rem] opacity-50 transition-all duration-300 hover:opacity-100 ${
+            data?.voters?.includes(signedInAccountQuery.data + "_up") &&
+            "text-[#FF6CE5] opactity-100"
+          }`}
           onClick={async (e) => {
             e.stopPropagation();
             if (!signedInAccountQuery.data)
@@ -71,6 +74,7 @@ export function IssuesListItem(props: Props) {
               addVote.mutate({
                 issueNumber: issue.number,
                 isUpVote: true,
+                walletId: signedInAccountQuery.data,
               });
             } catch (e) {
               console.error(e);
@@ -80,18 +84,23 @@ export function IssuesListItem(props: Props) {
         <IoIosArrowDown
           onClick={(e) => {
             e.stopPropagation();
-            if (!signedInAccountQuery) return alert("You need to be signed in");
+            if (!signedInAccountQuery.data)
+              return alert("You need to be signed in");
             if (!canVote.data) return alert("You don't have access to vote");
             try {
               addVote.mutate({
                 issueNumber: issue.number,
                 isUpVote: false,
+                walletId: signedInAccountQuery.data,
               });
             } catch (e) {
               console.error(e);
             }
           }}
-          className="text-[1.5rem] opacity-50 transition-all duration-300 hover:opacity-100"
+          className={`text-[1.5rem] opacity-50 transition-all duration-300 hover:opacity-100 ${
+            data?.voters?.includes(signedInAccountQuery.data + "_down") &&
+            "text-red-500"
+          }`}
         />
       </div>
     </li>

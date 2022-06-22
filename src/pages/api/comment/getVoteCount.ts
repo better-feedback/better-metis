@@ -43,10 +43,12 @@ export default async function handler(
         if (!body || !body.includes("vote"))
           return res.status(200).json({ votes: 0 });
 
-       /* Destructuring the metadata and cleanedComment from the getMetadataAndCleanedComment function. */
+        /* Destructuring the metadata and cleanedComment from the getMetadataAndCleanedComment function. */
         const { metadata, cleanedComment } = getMetadataAndCleanedComment(body);
 
-        return res.status(200).json(metadata?.votes ? metadata : { votes: 0 });
+        return res
+          .status(200)
+          .json(metadata?.votes ? metadata : { votes: 0, voters: [] });
       default:
         throw new ApiError(400, `Method ${req.method} not allowed`);
     }
