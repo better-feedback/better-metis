@@ -30,6 +30,9 @@ export function IssuesListItem(props: Props) {
   const canVote = useVotingAccessQuery();
   const addVote = useVote();
   const { data } = useIssueVoteCount(issue.number);
+  
+  
+
 
   return (
     <li className="py-2 px-4 dark:hover:bg-zinc-800 hover:bg-gray-200 cursor-pointer overlow flex justify-between ">
@@ -64,7 +67,7 @@ export function IssuesListItem(props: Props) {
           className="text-[1.5rem] opacity-50 transition-all duration-300 hover:opacity-100"
           onClick={async (e) => {
             e.stopPropagation();
-            if (!signedInAccountQuery) return alert("You need to be signed in");
+            if (!signedInAccountQuery.data) return alert("You need to be signed in");
             if (!canVote.data) return alert("You don't have access to vote");
             try {
               addVote.mutate({
