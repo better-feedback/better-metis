@@ -7,4 +7,5 @@ export type Metadata = {
 
 export type CommentMatadata = {
   votes : number;
+  voters: string[]
 }

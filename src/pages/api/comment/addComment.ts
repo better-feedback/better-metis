@@ -20,6 +20,11 @@ type Data = {
   error?: any;
 };
 
+import type {
+  CommentMatadata,
+  Metadata,
+} from "features/api-routes/api/github/types";
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -38,7 +43,7 @@ export default async function handler(
           return res.status(500).send("Missing environment variables");
 
         /* Destructuring the request body and then getting the metadata comment id. */
-        const { issueNumber, isUpVote } = req.body;
+        const { issueNumber, isUpVote, walletId } = req.body;
 
         const { id, body } = await getMetadataCommentId(issueNumber);
 
@@ -48,6 +53,8 @@ export default async function handler(
             `This issue has ${isUpVote ? "1" : "-1"} votes`,
             {
               votes: isUpVote ? 1 : -1,
+              //Add wallet is with voting type
+              voters: [`${walletId}_${isUpVote ? "up" : "down"}`],
             }
           );
 
@@ -57,19 +64,65 @@ export default async function handler(
             issue_number: issueNumber,
             body: commentBody,
           });
-        }/* This is updating the comment with the new vote count. */
-         else {
-          const { metadata, cleanedComment } =
+        } /* This is updating the comment with the new vote count. */ else {
+          const {
+            metadata,
+            cleanedComment,
+          }: { metadata: CommentMatadata | any; cleanedComment: string } =
             getMetadataAndCleanedComment(body);
 
-          const newVotes = isUpVote
-            ? metadata["votes"] + 1
-            : metadata["votes"] - 1;
+          let newVotes: number = metadata.votes;
+          let newVoters: string[] = [...metadata.voters];
+
+          //If wallet is upvoting and now downvotes, keep in voters and lower vote by 2
+          if (!isUpVote && metadata.voters.includes(walletId + "_up")) {
+            newVoters = metadata.voters.filter(
+              (voter: string) => !voter.includes(walletId)
+            );
+            newVoters.push(`${walletId}_down`);
+            newVotes = metadata.votes - 2;
+          }
+
+          //If wallet is downvoting and now upvotes, keep in voters and increase vote by 2
+          else if (isUpVote && metadata.voters.includes(walletId + "_down")) {
+            newVoters = metadata.voters.filter(
+              (voter: string) => !voter.includes(walletId)
+            );
+            newVoters.push(`${walletId}_up`);
+            newVotes = metadata.votes + 2;
+          }
+
+          //If the wallet is upvoting and presses upvote again remove from voters and decrease vote by 1
+          else if (isUpVote && metadata.voters.includes(walletId + "_up")) {
+            newVoters = metadata.voters.filter(
+              (voter: string) => !voter.includes(walletId)
+            );
+            newVotes = metadata.votes - 1;
+          }
+
+          //If the wallet is downvoting and presses downvote again remove from voters and increase vote by 1
+          else if (!isUpVote && metadata.voters.includes(walletId + "_down")) {
+            newVoters = metadata.voters.filter(
+              (voter: string) => !voter.includes(walletId)
+            );
+            newVotes = metadata.votes + 1;
+          }
+
+          //If the wallet never voted before add to voters and increase or decrease vote by 1
+          else {
+            newVoters = [
+              ...metadata.voters,
+              `${walletId}_${isUpVote ? "up" : "down"}`,
+            ];
+
+            newVotes = isUpVote ? metadata.votes + 1 : metadata.votes - 1;
+          }
 
           const commentBody = setMetadataComment(
             `This issue has ${newVotes} votes`,
             {
               votes: newVotes,
+              voters: newVoters,
             }
           );
 

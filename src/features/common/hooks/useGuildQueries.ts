@@ -1,5 +1,6 @@
 import { guild } from "@guildxyz/sdk";
 import axios from "axios";
+import { Issue } from "features/issues/types";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { nearAccountToHex } from "utils/helpers";
 import { chainsToApi } from "../constants";
@@ -45,6 +46,13 @@ export function useVotingAccessQuery() {
   });
 }
 
+export const getVoteCount = async (issueNumber: number) => {
+  const result = await axios.get(
+    `/api/comment/getVoteCount?issueNumber=${issueNumber}`
+  );
+  return result.data;
+};
+
 /*
  * It returns the number of votes for a given issue
  * @param {number} issueNumber - The issue number of the issue we want to get the vote count for.
@@ -53,10 +61,7 @@ export function useVotingAccessQuery() {
 export function useIssueVoteCount(issueNumber: number) {
   return useQuery(["issueVoteCount", issueNumber], async () => {
     /* Making a request to the backend to get the vote count for a given issue. */
-    const result = await axios.get(
-      `/api/comment/getVoteCount?issueNumber=${issueNumber}`
-    );
-    return result.data;
+    return getVoteCount(issueNumber);
   });
 }
 
@@ -64,10 +69,15 @@ export function useVote() {
   const queryClient = useQueryClient();
 
   const addVoteMutation = useMutation(
-    async (params: { issueNumber: number; isUpVote: boolean }) => {
+    async (params: {
+      issueNumber: number;
+      isUpVote: boolean;
+      walletId: string;
+    }) => {
       const result = await axios.post("/api/comment/addComment", {
         issueNumber: params.issueNumber,
         isUpVote: params.isUpVote,
+        walletId: params.walletId,
       });
       return result.data;
     },
@@ -81,6 +91,5 @@ export function useVote() {
     }
   );
 
-
-  return addVoteMutation
+  return addVoteMutation;
 }
