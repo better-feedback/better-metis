@@ -8,6 +8,8 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 
 import { useWalletSignedInAccountQuery } from "features/common/hooks/useWalletQueries";
 
+import { CommentMatadata } from "./../../../features/api-routes/api/github/types";
+
 import {
   useVotingAccessQuery,
   useIssueVoteCount,
@@ -57,11 +59,12 @@ export function IssuesListItem(props: Props) {
       </Link>
       <ListItemMetadata metadata={issue.metadata} />
       <div className="flex flex-col justify-center items-center ">
-        <span>{data?.votes}</span>
+        <span>{(data as CommentMatadata)?.upVotes}</span>
         <IoIosArrowUp
           className={`text-[1.5rem] h-5	opacity-50 transition-all duration-300 hover:opacity-100 ${
-            data?.voters?.includes(signedInAccountQuery.data + "_up") &&
-            "text-[#FF6CE5] opactity-100"
+            (data as CommentMatadata)?.voters?.includes(
+              signedInAccountQuery.data + "_up"
+            ) && "text-[#FF6CE5] opactity-100"
           }`}
           onClick={async (e) => {
             e.stopPropagation();
@@ -96,10 +99,12 @@ export function IssuesListItem(props: Props) {
             }
           }}
           className={`text-[1.5rem] h-5 opacity-50 transition-all duration-300 hover:opacity-100 ${
-            data?.voters?.includes(signedInAccountQuery.data + "_down") &&
-            "text-red-500"
+            (data as CommentMatadata)?.voters?.includes(
+              signedInAccountQuery.data + "_down"
+            ) && "text-red-500"
           }`}
         />
+        <span>{(data as CommentMatadata)?.downVotes}</span>
       </div>
     </li>
   );
