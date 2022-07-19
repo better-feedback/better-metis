@@ -59,13 +59,12 @@ export function IssuesListItem(props: Props) {
       </Link>
       <ListItemMetadata metadata={issue.metadata} />
       <div className="flex flex-col justify-center items-center ">
-        <span>{(data as CommentMatadata)?.upVotes}</span>
+        <span>{process.env.NEXT_PUBLIC_SHOW_DOWNVOTES == "false" ? ((data as CommentMatadata)?.upVotes) - (data as CommentMatadata)?.downVotes : ((data as CommentMatadata)?.upVotes)}</span>
         <IoIosArrowUp
-          className={`text-[1.5rem] h-5	opacity-50 transition-all duration-300 hover:opacity-100 ${
-            (data as CommentMatadata)?.voters?.includes(
-              signedInAccountQuery.data + "_up"
-            ) && "text-[#FF6CE5] opactity-100"
-          }`}
+          className={`text-[1.5rem] h-5	opacity-50 transition-all duration-300 hover:opacity-100 ${(data as CommentMatadata)?.voters?.includes(
+            signedInAccountQuery.data + "_up"
+          ) && "text-[#FF6CE5] opactity-100"
+            }`}
           onClick={async (e) => {
             e.stopPropagation();
             if (!signedInAccountQuery.data)
@@ -98,13 +97,12 @@ export function IssuesListItem(props: Props) {
               console.error(e);
             }
           }}
-          className={`text-[1.5rem] h-5 opacity-50 transition-all duration-300 hover:opacity-100 ${
-            (data as CommentMatadata)?.voters?.includes(
-              signedInAccountQuery.data + "_down"
-            ) && "text-red-500"
-          }`}
+          className={`text-[1.5rem] h-5 opacity-50 transition-all duration-300 hover:opacity-100 ${(data as CommentMatadata)?.voters?.includes(
+            signedInAccountQuery.data + "_down"
+          ) && "text-red-500"
+            }`}
         />
-        <span>{(data as CommentMatadata)?.downVotes}</span>
+        {process.env.NEXT_PUBLIC_SHOW_DOWNVOTES == "true" && <span>{(data as CommentMatadata)?.downVotes}</span>}
       </div>
     </li>
   );
