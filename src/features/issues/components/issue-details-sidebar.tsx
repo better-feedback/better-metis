@@ -27,7 +27,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
   const [isApplyingToWork, setIsApplyingToWork] = useState(false);
 
 
-  console.log("thing that is disabling the app :" , walletIsSignedInQuery);
+
 
 
   const loadBountyDetails = () => {
