@@ -4,6 +4,8 @@ import { chainsToApi } from "../constants";
 
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 
+import { useAccount } from "wagmi";
+
 export function useWalletChainQuery() {
   return useQuery(["wallet", "chain"], () => {
     const walletChain = window.localStorage.getItem("wallet-chain");
@@ -12,6 +14,8 @@ export function useWalletChainQuery() {
 }
 
 export function useWalletIsSignedInQuery() {
+  const { isConnected } = useAccount();
+
   return useQuery(["wallet", "isSignedIn"], () => {
     const walletChain = window.localStorage.getItem("wallet-chain");
 
@@ -19,8 +23,11 @@ export function useWalletIsSignedInQuery() {
       return false;
     }
 
-    const { isSignedIn } = chainsToApi[walletChain];
-    return isSignedIn();
+    const { isSignedIn } =
+      walletChain === "near"
+        ? chainsToApi[walletChain]
+        : { isSignedIn: () => {} };
+    return walletChain === "near" ? isSignedIn() : isConnected;
   });
 }
 

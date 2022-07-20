@@ -16,7 +16,7 @@ export default function HeaderNav() {
 
   const { isDisconnected } = useAccount()
 
-  console.log(isDisconnected)
+
 
 
   // Removing the wallet from local storage when the user disconnects it (Polygon only)

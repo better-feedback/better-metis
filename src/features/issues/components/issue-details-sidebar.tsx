@@ -26,6 +26,10 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
   const [poolInDollars, setPoolInDollars] = useState<string>("");
   const [isApplyingToWork, setIsApplyingToWork] = useState(false);
 
+
+  console.log("thing that is disabling the app :" , walletIsSignedInQuery);
+
+
   const loadBountyDetails = () => {
     viewFunction("getBountyByIssue", { issueId: props.issue.url })
       .then((res) => {
