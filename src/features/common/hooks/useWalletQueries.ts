@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import { chainsToApi } from "../constants";
 
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+
 export function useWalletChainQuery() {
   return useQuery(["wallet", "chain"], () => {
     const walletChain = window.localStorage.getItem("wallet-chain");
@@ -37,12 +39,19 @@ export function useWalletSignedInAccountQuery() {
 
 export function useWalletSignInMutation() {
   const queryClient = useQueryClient();
+  const { openConnectModal } = useConnectModal();
 
   const walletSignInMutation = useMutation(
     async (walletChain: string) => {
-      const { signIn } = chainsToApi[walletChain];
+      if (walletChain === "near") {
+        const { signIn } = chainsToApi[walletChain];
 
-      await signIn();
+        await signIn();
+      } else {
+        if (openConnectModal) {
+          openConnectModal();
+        }
+      }
       window.localStorage.setItem("wallet-chain", walletChain);
     },
     {
