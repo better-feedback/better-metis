@@ -13,6 +13,9 @@ import { viewFunction } from "features/near/api";
 import { useRouter } from "next/router";
 
 import type { Token } from "features/tokens/types";
+import { ethers } from "ethers";
+import { useContractWrite, useAccount, useSigner, useConnect } from "wagmi";
+import * as betterBounty from "utils/solidity/BetterBounty.json"
 
 
 export default function AddBounty(props: { issueNumber: number }) {
@@ -21,11 +24,45 @@ export default function AddBounty(props: { issueNumber: number }) {
   const [maxDeadline, setMaxDeadline] = React.useState("");
   const [areInputsValid, setAreInputsValid] = React.useState(false);
   const [doesBountyExist, setDoesBountyExist] = React.useState(false);
+  const [signer, setSigner] = React.useState<ethers.Signer | undefined | null>(null);
+
+  const [isCreationLoading, setIsCreationLoading] = React.useState(false);
+  const [isLoadingSigner, setIsLoadingSigner] = React.useState(false);
 
   const { data: issue, isLoading } = useIssueDetailsQuery(props.issueNumber);
   const { data: walletChain = "" } = useWalletChainQuery();
   const addBountyMutation = useAddBountyMutation();
   const router = useRouter();
+  const account = useAccount();
+
+
+
+
+
+  const { data, isError, isLoading: writing, write } = useContractWrite({
+    addressOrName: process.env.NEXT_PUBLIC_POLYGON_CONTRACT_ADDRESS as string,
+    contractInterface: betterBounty.abi,
+    functionName: 'fundBounty',
+    args: [issue?.url, maxDeadline
+      ? new Date(new Date(maxDeadline).setUTCHours(23, 59, 59, 59)).getTime().toString()
+      : "0"],
+    overrides: {
+      value: ethers.utils.parseEther(amount ? amount : "0"),
+    },
+    onError: (error) => {
+      setIsCreationLoading(false)
+      alert(error)
+
+    },
+    onSuccess: () => {
+      setIsCreationLoading(false)
+
+      router.replace(`/issues/${issue?.number}`);
+    }
+  })
+
+
+
 
   useEffect(() => {
     let issueNumber = window.location.pathname.split("/")[2];
@@ -33,6 +70,9 @@ export default function AddBounty(props: { issueNumber: number }) {
       router.replace(`/issues/${issueNumber}`);
     }
   }, [walletChain]);
+
+
+
 
   function handleChangeMaxDeadline(event: React.ChangeEvent<HTMLInputElement>) {
     setMaxDeadline(event.target.value);
@@ -47,18 +87,24 @@ export default function AddBounty(props: { issueNumber: number }) {
       return setAreInputsValid(false);
     }
 
-    localStorage.setItem("isBountyAdded", "true");
 
-    addBountyMutation.mutate({
-      issueNumber: issue.url,
-      issueDescription: "byebye",
-      chain: walletChain,
-      token: token.address,
-      maxDeadline: maxDeadline
-        ? new Date(new Date(maxDeadline).setUTCHours(23, 59, 59, 59)).getTime()
-        : 0,
-      amount,
-    });
+    if (walletChain === "near") {
+      localStorage.setItem("isBountyAdded", "true");
+
+      addBountyMutation.mutate({
+        issueNumber: issue.url,
+        issueDescription: "byebye",
+        chain: walletChain,
+        token: token.address,
+        maxDeadline: maxDeadline
+          ? new Date(new Date(maxDeadline).setUTCHours(23, 59, 59, 59)).getTime()
+          : 0,
+        amount,
+      });
+    } else {
+      write();
+    }
+
   }
 
   useEffect(() => {
@@ -139,11 +185,11 @@ export default function AddBounty(props: { issueNumber: number }) {
           onClick={handleClickAddBounty}
           disabled={addBountyMutation.isLoading}
         >
-          {addBountyMutation.isLoading
+          {addBountyMutation.isLoading || writing
             ? "Creating bounty..."
             : doesBountyExist
-            ? "Fund Bounty"
-            : "Create bounty"}
+              ? "Fund Bounty"
+              : "Create bounty"}
         </Button>
       </form>
     </div>

@@ -22,28 +22,29 @@ import {
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 
+const { chains, provider } = configureChains(
+  [chain.polygonMumbai],
+  [
+    alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }),
+    publicProvider()
+  ]
+);
+
+const { connectors } = getDefaultWallets({
+  appName: 'BetterApp',
+  chains
+});
+
+const wagmiClient = createClient({
+  autoConnect: true,
+  connectors,
+  provider
+})
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient());
 
-  const { chains, provider } = configureChains(
-    [chain.polygonMumbai],
-    [
-      alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }),
-      publicProvider()
-    ]
-  );
 
-  const { connectors } = getDefaultWallets({
-    appName: 'BetterApp',
-    chains
-  });
-
-  const wagmiClient = createClient({
-    autoConnect: true,
-    connectors,
-    provider
-  })
 
 
   return (
