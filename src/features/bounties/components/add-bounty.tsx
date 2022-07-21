@@ -70,7 +70,7 @@ export default function AddBounty(props: { issueNumber: number }) {
 
 
 
-  console.log("Bounty data" , bountyPolygon.data)
+
 
 
 

@@ -12,5 +12,5 @@ export default async function getBounty(bountyId: string) {
     args: bountyId,
   });
 
-  console.log("Printing the bounty", bounty);
+
 }
