@@ -148,6 +148,12 @@ export default function AddBounty(props: { issueNumber: number }) {
     return <div>Not found</div>;
   }
 
+
+
+  const showDatePicker = () => {
+    return walletChain === "near" ? !doesBountyExist : bountyPolygon?.data?.id === ""
+  }
+
   return (
     <div className="max-w-md mx-auto">
       <h1 className="text-xl font-semibold">Add bounty</h1>
@@ -171,7 +177,7 @@ export default function AddBounty(props: { issueNumber: number }) {
         <LabeledInput label="Created at">
           <div>{issue.number}</div>
         </LabeledInput>
-        {!doesBountyExist || bountyPolygon?.data?.id !== "" && (
+        {showDatePicker() && (
           <LabeledInput label="Max. deadline" className="col-span-4">
             <FormInput
               type="date"
