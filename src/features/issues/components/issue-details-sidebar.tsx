@@ -101,7 +101,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
         )
       );
     })();
-  }, [bountySolidity.isSuccess])
+  }, [bountySolidity.data])
 
   return (
     <aside className="col-span-5 md:col-span-1 my-4 border-t-2 border-gray-100 dark:border-zinc-800 md:my-0 md:border-t-0">

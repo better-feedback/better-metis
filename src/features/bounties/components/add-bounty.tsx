@@ -14,8 +14,9 @@ import { useRouter } from "next/router";
 
 import type { Token } from "features/tokens/types";
 import { ethers } from "ethers";
-import { useContractWrite, useAccount, useSigner, useConnect } from "wagmi";
-import * as betterBounty from "utils/solidity/BetterBounty.json"
+import { useContractWrite, useAccount, useContractRead } from "wagmi";
+
+import { contractConfig } from "utils/solidity/defaultConfig";
 
 
 export default function AddBounty(props: { issueNumber: number }) {
@@ -24,7 +25,6 @@ export default function AddBounty(props: { issueNumber: number }) {
   const [maxDeadline, setMaxDeadline] = React.useState("");
   const [areInputsValid, setAreInputsValid] = React.useState(false);
   const [doesBountyExist, setDoesBountyExist] = React.useState(false);
-  const [signer, setSigner] = React.useState<ethers.Signer | undefined | null>(null);
 
   const [isCreationLoading, setIsCreationLoading] = React.useState(false);
   const [isLoadingSigner, setIsLoadingSigner] = React.useState(false);
@@ -40,8 +40,7 @@ export default function AddBounty(props: { issueNumber: number }) {
 
 
   const { data, isError, isLoading: writing, write } = useContractWrite({
-    addressOrName: process.env.NEXT_PUBLIC_POLYGON_CONTRACT_ADDRESS as string,
-    contractInterface: betterBounty.abi,
+    ...contractConfig,
     functionName: 'fundBounty',
     args: [issue?.url, maxDeadline
       ? new Date(new Date(maxDeadline).setUTCHours(23, 59, 59, 59)).getTime().toString()
@@ -60,6 +59,18 @@ export default function AddBounty(props: { issueNumber: number }) {
       router.replace(`/issues/${issue?.number}`);
     }
   })
+
+
+  const bountyPolygon = useContractRead({
+    ...contractConfig,
+    functionName: "getBountyById",
+    args: issue?.url,
+    watch: true,
+  });
+
+
+
+  console.log("Bounty data" , bountyPolygon.data)
 
 
 
@@ -160,7 +171,7 @@ export default function AddBounty(props: { issueNumber: number }) {
         <LabeledInput label="Created at">
           <div>{issue.number}</div>
         </LabeledInput>
-        {!doesBountyExist && (
+        {!doesBountyExist || bountyPolygon?.data?.id !== "" && (
           <LabeledInput label="Max. deadline" className="col-span-4">
             <FormInput
               type="date"
@@ -187,7 +198,7 @@ export default function AddBounty(props: { issueNumber: number }) {
         >
           {addBountyMutation.isLoading || writing
             ? "Creating bounty..."
-            : doesBountyExist
+            : doesBountyExist || bountyPolygon?.data?.id !== ""
               ? "Fund Bounty"
               : "Create bounty"}
         </Button>
