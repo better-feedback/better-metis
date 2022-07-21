@@ -4,10 +4,13 @@ import { useRouter } from "next/router";
 import StatusLabel from "features/common/components/status-label";
 import Button from "features/common/components/button";
 import {
+  useWalletChainQuery,
   useWalletIsSignedInQuery,
   useWalletSignedInAccountQuery,
 } from "features/common/hooks/useWalletQueries";
-import * as betterBounty from "../../../utils/solidity/BetterBounty.json";
+
+
+import { contractConfig } from "utils/solidity/defaultConfig"
 
 import { utils } from "near-api-js";
 
@@ -16,7 +19,7 @@ import type { Bounty } from "../../bounties/types";
 import { viewFunction, callFunction } from "features/near/api";
 import { parseDate } from "../../../utils/helpers.js";
 import { QueryObserverIdleResult } from "react-query";
-import { useContractRead, useAccount } from "wagmi";
+import { useContractRead, useAccount, useContractWrite } from "wagmi";
 import { ethers } from "ethers";
 
 
@@ -25,7 +28,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
   const router = useRouter();
   const walletIsSignedInQuery = useWalletIsSignedInQuery();
   const walledId = useWalletSignedInAccountQuery();
-
+  const { data: walletChain } = useWalletChainQuery()
   const [bounty, setBounty] = useState<Bounty | null>(null);
   const [pool, setPool] = useState("");
   // Near price in dollars
@@ -38,13 +41,28 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
   const { address } = useAccount()
 
   const bountySolidity = useContractRead({
-    addressOrName: process.env.NEXT_PUBLIC_POLYGON_CONTRACT_ADDRESS as string,
-    contractInterface: betterBounty.abi,
+    ...contractConfig,
     functionName: "getBountyById",
     args: props.issue.url,
     watch: true,
   });
 
+
+  const { write: startWorkPoylgon } = useContractWrite({
+    ...contractConfig,
+    functionName: 'startWork',
+    args: props.issue.url,
+
+    onError: (error) => {
+      setIsApplyingToWork(false)
+      alert(error)
+    },
+    onSuccess: () => {
+      setIsApplyingToWork(false)
+      alert("Successfully started working on the bounty");
+      window.location.reload();
+    }
+  })
 
 
 
@@ -103,6 +121,22 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
     })();
   }, [bountySolidity.data])
 
+
+  const isStartWorkDisabled = () => {
+    let isDisabled = true;
+
+    if (walletChain === "near") {
+      isDisabled = !bounty ||
+        !walletIsSignedInQuery.data || 
+        bounty?.workers?.includes(walledId?.data as string) || isApplyingToWork
+    } else {
+      isDisabled = isApplyingToWork || bountySolidity?.data?.id == "" || (bountySolidity?.data?.workers?.includes(address) || bountySolidity.isLoading)
+    }
+
+    return isDisabled;
+  }
+
+
   return (
     <aside className="col-span-5 md:col-span-1 my-4 border-t-2 border-gray-100 dark:border-zinc-800 md:my-0 md:border-t-0">
       <SidebarItem title="Status" content={<StatusLabel status="open" />} />
@@ -150,23 +184,27 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
         <Button
           onClick={() => {
             setIsApplyingToWork(true);
+
             /* Calling the startWork function in the contract. */
-            callFunction("startWork", { issueId: props.issue.url })
-              .then(() => {
-                setIsApplyingToWork(false);
-                loadBountyDetails();
-                alert("Successfully started working on the bounty");
-              })
-              .catch((error) => {
-                setIsApplyingToWork(false);
-                alert(error);
-              });
+            if (walletChain === "near") {
+
+              callFunction("startWork", { issueId: props.issue.url })
+                .then(() => {
+                  setIsApplyingToWork(false);
+                  loadBountyDetails();
+                  alert("Successfully started working on the bounty");
+                })
+                .catch((error) => {
+                  setIsApplyingToWork(false);
+                  alert(error);
+                });
+            }
+            else {
+              startWorkPoylgon()
+            }
           }}
           disabled={
-            !bounty ||
-            !walletIsSignedInQuery.data ||
-            bounty?.workers?.includes(walledId?.data as string)
-            || bountySolidity?.data?.id === "" || (bountySolidity?.data?.workers?.includes(address) || bountySolidity.isLoading)
+            isStartWorkDisabled()
           }
         >
           {isApplyingToWork ? "Loading..." : "Start Work"}
