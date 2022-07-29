@@ -78,47 +78,57 @@ export function IssuesListItem(props: Props) {
         </div>
       </Link>
       <ListItemMetadata metadata={issue.metadata} />
-      <div className="flex flex-col justify-center items-center ">
-        <span>{process.env.NEXT_PUBLIC_SHOW_DOWNVOTES == "false" ? ((data as CommentMatadata)?.upVotes) - (data as CommentMatadata)?.downVotes : ((data as CommentMatadata)?.upVotes)}</span>
-        <IoIosArrowUp
-          className={`text-[1.5rem] h-5	opacity-50 transition-all duration-300 hover:opacity-100 ${hasUserVotes("_up") && "text-[#FF6CE5] opactity-100"
+      <div className="flex flex-row justify-center items-center">
+        <div className="flex flex-col justify-center items-center space-y-1 pr-1">
+          <IoIosArrowUp
+            className={`text-[1.5rem] h-5	opacity-50 transition-all duration-300 hover:opacity-100 ${
+              (data as CommentMatadata)?.voters?.includes(
+                signedInAccountQuery.data + "_up"
+              ) && "text-[#FF6CE5] opactity-100"
             }`}
-          onClick={async (e) => {
-            e.stopPropagation();
-            if (!isUserConnected())
-              return alert("You need to be signed in");
-            if (!canVote.data) return alert("You don't have access to vote");
-            try {
-              addVote.mutate({
-                issueNumber: issue.number,
-                isUpVote: true,
-                walletId: walletChain === "near" ? signedInAccountQuery.data as string : address as string,
-              });
-            } catch (e) {
-              console.error(e);
-            }
-          }}
-        />
-        <IoIosArrowDown
-          onClick={(e) => {
-            e.stopPropagation();
-            if (!isUserConnected())
-              return alert("You need to be signed in");
-            if (!canVote.data) return alert("You don't have access to vote");
-            try {
-              addVote.mutate({
-                issueNumber: issue.number,
-                isUpVote: false,
-                walletId: walletChain === "near" ? signedInAccountQuery.data as string : address as string,
-              });
-            } catch (e) {
-              console.error(e);
-            }
-          }}
-          className={`text-[1.5rem] h-5 opacity-50 transition-all duration-300 hover:opacity-100 ${hasUserVotes("_down") && "text-red-500"
+            onClick={async (e) => {
+              e.stopPropagation();
+              if (!signedInAccountQuery.data)
+                return alert("You need to be signed in");
+              if (!canVote.data) return alert("You don't have access to vote");
+              try {
+                addVote.mutate({
+                  issueNumber: issue.number,
+                  isUpVote: true,
+                  walletId: signedInAccountQuery.data,
+                });
+              } catch (e) {
+                console.error(e);
+              }
+            }}
+          />
+          <IoIosArrowDown
+            onClick={(e) => {
+              e.stopPropagation();
+              if (!signedInAccountQuery.data)
+                return alert("You need to be signed in");
+              if (!canVote.data) return alert("You don't have access to vote");
+              try {
+                addVote.mutate({
+                  issueNumber: issue.number,
+                  isUpVote: false,
+                  walletId: signedInAccountQuery.data,
+                });
+              } catch (e) {
+                console.error(e);
+              }
+            }}
+            className={`text-[1.5rem] h-5 opacity-50 transition-all duration-300 hover:opacity-100 ${
+              (data as CommentMatadata)?.voters?.includes(
+                signedInAccountQuery.data + "_down"
+              ) && "text-red-500"
             }`}
-        />
-        {process.env.NEXT_PUBLIC_SHOW_DOWNVOTES == "true" && <span>{(data as CommentMatadata)?.downVotes}</span>}
+          />
+        </div>
+        <div className="flex flex-col justify-center items-center text-sm">
+          <span>{(data as CommentMatadata)?.upVotes}</span>
+          <span>{(data as CommentMatadata)?.downVotes}</span>
+        </div>
       </div>
     </li>
   );
