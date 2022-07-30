@@ -18,6 +18,8 @@ import { useContractWrite, useAccount, useContractRead } from "wagmi";
 
 import { contractConfig } from "utils/solidity/defaultConfig";
 
+import { parseDate } from "utils/helpers";
+
 
 export default function AddBounty(props: { issueNumber: number }) {
   const [token, setToken] = React.useState<Token | null>(null);
@@ -172,10 +174,10 @@ export default function AddBounty(props: { issueNumber: number }) {
           <div>#{issue.number}</div>
         </LabeledInput>
         <LabeledInput label="Status">
-          <div>{issue.number}</div>
+          <div>{walletChain === "near" ? (!doesBountyExist ? "NOBOUNTY" : "OPEN") : (bountyPolygon?.data?.id === "" ? "NOBOUNTY" : "OPEN")}</div>
         </LabeledInput>
-        <LabeledInput label="Created at">
-          <div>{issue.number}</div>
+        <LabeledInput label="Deadline">
+          <div>{walletChain === "near" ? (!doesBountyExist ? "-" : parseDate(doesBountyExist?.deadline)) : (bountyPolygon?.data?.id === "" ? "-" : parseDate(bountyPolygon?.data?.deadline))}</div>
         </LabeledInput>
         {showDatePicker() && (
           <LabeledInput label="Max. deadline" className="col-span-4">
