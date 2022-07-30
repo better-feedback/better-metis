@@ -81,21 +81,18 @@ export function IssuesListItem(props: Props) {
       <div className="flex flex-row justify-center items-center">
         <div className="flex flex-col justify-center items-center space-y-1 pr-1">
           <IoIosArrowUp
-            className={`text-[1.5rem] h-5	opacity-50 transition-all duration-300 hover:opacity-100 ${
-              (data as CommentMatadata)?.voters?.includes(
-                signedInAccountQuery.data + "_up"
-              ) && "text-[#FF6CE5] opactity-100"
+             className={`text-[1.5rem] h-5	opacity-50 transition-all duration-300 hover:opacity-100 ${hasUserVotes("_up") && "text-[#FF6CE5] opactity-100"
             }`}
             onClick={async (e) => {
               e.stopPropagation();
-              if (!signedInAccountQuery.data)
+              if (!isUserConnected())
                 return alert("You need to be signed in");
               if (!canVote.data) return alert("You don't have access to vote");
               try {
                 addVote.mutate({
                   issueNumber: issue.number,
                   isUpVote: true,
-                  walletId: signedInAccountQuery.data,
+                  walletId: walletChain === "near" ? signedInAccountQuery.data as string : address as string,
                 });
               } catch (e) {
                 console.error(e);
@@ -105,23 +102,20 @@ export function IssuesListItem(props: Props) {
           <IoIosArrowDown
             onClick={(e) => {
               e.stopPropagation();
-              if (!signedInAccountQuery.data)
+              if (!isUserConnected())
                 return alert("You need to be signed in");
               if (!canVote.data) return alert("You don't have access to vote");
               try {
                 addVote.mutate({
                   issueNumber: issue.number,
                   isUpVote: false,
-                  walletId: signedInAccountQuery.data,
+                  walletId: walletChain === "near" ? signedInAccountQuery.data as string : address as string,
                 });
               } catch (e) {
                 console.error(e);
               }
             }}
-            className={`text-[1.5rem] h-5 opacity-50 transition-all duration-300 hover:opacity-100 ${
-              (data as CommentMatadata)?.voters?.includes(
-                signedInAccountQuery.data + "_down"
-              ) && "text-red-500"
+            className={`text-[1.5rem] h-5 opacity-50 transition-all duration-300 hover:opacity-100 ${hasUserVotes("_down") && "text-red-500"
             }`}
           />
         </div>
