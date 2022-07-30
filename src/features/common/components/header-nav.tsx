@@ -18,9 +18,9 @@ export default function HeaderNav() {
 
   // Removing the wallet from local storage when the user disconnects it (Polygon only)
   useEffect(() => {
-    const walletChain = localStorage.getItem("walletChain")
+    const localStorageWallet = localStorage.getItem("wallet-chain")
 
-    if (isDisconnected && walletChain === "polygon") {
+    if (isDisconnected && localStorageWallet === "polygon") {
       localStorage.removeItem('wallet-chain')
     }
   }, [isDisconnected])

@@ -24,6 +24,7 @@ import { ethers } from "ethers";
 
 
 
+
 export default function IssueDetailsSidebar(props: { issue: Issue }) {
   const router = useRouter();
   const walletIsSignedInQuery = useWalletIsSignedInQuery();
@@ -38,7 +39,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
   const [isApplyingToWork, setIsApplyingToWork] = useState(false);
 
   // Getting logged in user wallet address
-  const { address } = useAccount()
+  const { address , isConnected } = useAccount()
 
   const bountySolidity = useContractRead({
     ...contractConfig,
@@ -125,16 +126,20 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
   const isStartWorkDisabled = () => {
     let isDisabled = true;
 
+    
     if (walletChain === "near") {
       isDisabled = !bounty ||
         !walletIsSignedInQuery.data || 
         bounty?.workers?.includes(walledId?.data as string) || isApplyingToWork
-    } else {
-      isDisabled = isApplyingToWork || bountySolidity?.data?.id == "" || (bountySolidity?.data?.workers?.includes(address) || bountySolidity.isLoading)
+    } else if(walletChain === "polygon") {
+      isDisabled = !isConnected || isApplyingToWork || bountySolidity?.data?.id == "" || (bountySolidity?.data?.workers?.includes(address) || bountySolidity.isLoading)
     }
+    
 
     return isDisabled;
   }
+
+
 
 
   return (
@@ -176,7 +181,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
           onClick={() =>
             router.push(`/issues/${props.issue.number}/add-bounty`)
           }
-          disabled={!walletIsSignedInQuery.data}
+          disabled={!walletIsSignedInQuery.data || !isConnected}
         >
           Add Bounty
         </Button>
@@ -210,7 +215,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
           {isApplyingToWork ? "Loading..." : "Start Work"}
         </Button>
       </div>
-      {!walletIsSignedInQuery.data && (
+      {(!walletIsSignedInQuery.data || !isConnected) && (
         <p className="text-xs text-center mt-2 text-gray-500 dark:text-zinc-500">
           You need to connect a wallet to add a bounty.
         </p>
