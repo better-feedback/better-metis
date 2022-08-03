@@ -83,6 +83,8 @@ yarn dev
 1. NEAR testnet
 2. Polygon testnet
 
+</details>
+
 <details>
   <summary>How to set up Guild.xyz to allow voting with NEAR wallets</summary>
 
