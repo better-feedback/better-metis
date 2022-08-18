@@ -6,14 +6,11 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 import { useAccount } from 'wagmi'
 import { useEffect } from "react";
-import { useUser,getAccessToken  } from '@auth0/nextjs-auth0'
+import { useUser } from '@auth0/nextjs-auth0'
 
 import { useWalletChainQuery } from "../hooks/useWalletQueries";
 
-
-
-
-
+import { AiFillGithub } from "react-icons/ai";
 
 export default function HeaderNav() {
 
@@ -22,8 +19,6 @@ export default function HeaderNav() {
   const { data: walletChain = "" } = useWalletChainQuery();
 
   const { user, error, isLoading } = useUser();
-
-  console.log(user)
 
 
   // Removing the wallet from local storage when the user disconnects it (Polygon only)
@@ -40,9 +35,27 @@ export default function HeaderNav() {
   return (
     <header className="shadow-md dark:bg-zinc-800">
       <nav className="container mx-auto p-4 flex flex-row justify-between items-center">
+
         <Link href={{ pathname: "/" }}>{config.site.title}</Link>
-        {(walletChain === "near" || !walletChain) || isDisconnected ? <ConnectWalletButton />
-          : <ConnectButton />}
+        <div className="flex items-center gap-x-4">
+          <div className="">
+
+            {user ? <div className="flex flex-col items-center gap-x-2">
+              <div className=" flex items-center  mr-2">
+
+
+
+
+                <span>{user.nickname}</span>
+              </div>
+              <a href="/api/auth/logout" className="text-[#FF6CE5]">Disconnect</a>
+
+            </div> : <Link href="/api/auth/login">
+              <AiFillGithub className="text-[1.5rem] cursor-pointer"/>
+            </Link>}
+          </div>
+          {(walletChain === "near" || !walletChain) || isDisconnected ? <ConnectWalletButton />
+            : <ConnectButton />}</div>
       </nav>
     </header>
   );
