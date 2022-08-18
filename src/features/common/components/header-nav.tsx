@@ -4,17 +4,27 @@ import ConnectWalletButton from "./connect-wallet-button";
 import config from "config";
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-
 import { useAccount } from 'wagmi'
 import { useEffect } from "react";
+import { useUser,getAccessToken  } from '@auth0/nextjs-auth0'
 
 import { useWalletChainQuery } from "../hooks/useWalletQueries";
+
+
+
+
+
 
 export default function HeaderNav() {
 
   const { isDisconnected } = useAccount()
 
   const { data: walletChain = "" } = useWalletChainQuery();
+
+  const { user, error, isLoading } = useUser();
+
+  console.log(user)
+
 
   // Removing the wallet from local storage when the user disconnects it (Polygon only)
   useEffect(() => {
@@ -25,7 +35,7 @@ export default function HeaderNav() {
     }
   }, [isDisconnected])
 
- 
+
 
   return (
     <header className="shadow-md dark:bg-zinc-800">
