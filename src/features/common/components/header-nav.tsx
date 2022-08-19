@@ -48,11 +48,13 @@ export default function HeaderNav() {
 
                 <span>{user.nickname}</span>
               </div>
-              <a href="/api/auth/logout" className="text-[#FF6CE5]">Disconnect</a>
+              <a onClick={() => {
+                window.location.assign('/api/auth/logout')
+              }} className="text-[#FF6CE5]">Disconnect</a>
 
-            </div> : <Link href="/api/auth/login">
-              <AiFillGithub className="text-[1.5rem] cursor-pointer"/>
-            </Link>}
+            </div> : 
+              <AiFillGithub onClick={() =>  window.location.assign('/api/auth/login')} className="text-[1.5rem] cursor-pointer"/>
+            }
           </div>
           {(walletChain === "near" || !walletChain) || isDisconnected ? <ConnectWalletButton />
             : <ConnectButton />}</div>
