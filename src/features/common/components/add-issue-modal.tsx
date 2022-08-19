@@ -78,7 +78,7 @@ const AddIssueModal = ({ setIsModalOpen }: AddIssueModalProps) => {
             </div>
             <FormInput onChange={(e) => setTitle(e.target?.value)} placeholder="Issue Title" />
 
-            <textarea className="mt-4 resize-none h-[70%] bg-gray-200 dark:bg-zinc-700 px-4 py-2 rounded-md  mb-4" placeholder="Issue Body" onChange={(e) => setValue(e.target.value)} />
+            <textarea className="mt-4 resize-none h-[70%] bg-gray-200 dark:bg-zinc-700 px-4 py-2 rounded-md  mb-4" placeholder="Drop your suggestions here. After submitting, tag the issue with >open< and >feature< to mirror it on this page for voting and funding" onChange={(e) => setValue(e.target.value)} />
 
             <Button onClick={submitIssue} disabled={title.length === 0 || value.length == 0} >
                 {isSubmitLoading ? "Loading..." : "Submit"}
