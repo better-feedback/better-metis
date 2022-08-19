@@ -70,7 +70,7 @@ const AddIssueModal = ({ setIsModalOpen }: AddIssueModalProps) => {
     return <div onClick={() => setIsModalOpen(false)} className="w-screen h-screen bg-black/50 top-0 left-0 absolute z-10 flex items-center justify-center">
         <div onClick={(e) => {
             e.stopPropagation()
-        }} className="rounded-md p-4 dark:bg-zinc-900 flex flex-col dark:text-white w-[90vw] h-[80vh] lg:w-[50vw] ">
+        }} className="rounded-md p-4 bg-white dark:bg-zinc-900 flex flex-col dark:text-white w-[90vw] h-[80vh] lg:w-[50vw] ">
             <div className="flex items-center justify-between">
 
                 <span className="font-bold mb-4">Add Issue</span>
