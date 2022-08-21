@@ -51,18 +51,23 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
 
 
   const isNotConnectedToWallet = () => {
-    let isNotConnected;
+    let isNotConnected = true;
 
-    const walletChain = localStorage.getItem("wallet-chain")
+    const walletChainFromLocalStorage = localStorage.getItem("wallet-chain")
 
-    if (walletChain === "near") {
+    console.log("walletChainFromLocalStorage", walletChainFromLocalStorage)
+
+
+    if (walletChainFromLocalStorage === "near") {
       isNotConnected = !walletIsSignedInQuery.data
-    } else if (walletChain === "polygon") {
+    } else if (walletChainFromLocalStorage === "polygon") {
       isNotConnected = !isConnected
     }
 
     return isNotConnected
   }
+
+  console.log(isNotConnectedToWallet())
 
 
   const postComment = async () => {
