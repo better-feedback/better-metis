@@ -46,8 +46,11 @@ export default function AddBounty(props: { issueNumber: number }) {
     ...contractConfig,
     functionName: 'fundBounty',
     args: [issue?.url, maxDeadline
-      ? new Date(new Date(maxDeadline).setUTCHours(23, 59, 59, 59)).getTime().toString()
-      : "0"],
+      ? Math.floor((new Date(new Date(maxDeadline).setUTCHours(23, 59, 59, 59)).getTime() / 1000)).toString()
+      : "0",
+    Math.floor(Date.now() / 1000).toString(),
+    (process.env.NEXT_PUBLIC_PROJECT as string).toLowerCase()
+    ],
     overrides: {
       value: ethers.utils.parseEther(amount ? amount : "0"),
     },
@@ -73,7 +76,7 @@ export default function AddBounty(props: { issueNumber: number }) {
 
 
 
-
+  console.log(bountyPolygon)
 
 
 
@@ -179,7 +182,7 @@ export default function AddBounty(props: { issueNumber: number }) {
     if (localStorageChain === "near") {
       return Math.floor(Date.now() / 1000) > parseInt(doesBountyExist?.deadline);
     } else {
-      return Math.floor(Date.now() / 1000) > parseInt(bountyPolygon?.deadline);
+      return Math.floor(Date.now() / 1000) > parseInt(bountyPolygon?.data?.deadline);
     }
   }
 
@@ -208,7 +211,7 @@ export default function AddBounty(props: { issueNumber: number }) {
           <div>{walletChain === "near" ? isExpired() ? "EXPIRED" : (!doesBountyExist ? "NOBOUNTY" : "OPEN") : (bountyPolygon?.data?.id === "" ? "NOBOUNTY" : "OPEN")}</div>
         </LabeledInput>
         <LabeledInput label="Started At">
-          <div>{walletChain === "near" ? (!doesBountyExist ? "-" : parseDate(doesBountyExist?.startedAt)) : (bountyPolygon?.data?.id === "" ? "-" : parseDate(bountyPolygon?.data?.deadline))}</div>
+          <div>{walletChain === "near" ? (!doesBountyExist ? "-" : parseDate(doesBountyExist?.startedAt)) : (bountyPolygon?.data?.id === "" ? "-" : parseDate(bountyPolygon?.data?.startedAt))}</div>
         </LabeledInput>
         {showDatePicker() && (
           <LabeledInput label="Max. deadline" className="col-span-4">

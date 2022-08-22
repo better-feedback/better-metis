@@ -95,6 +95,8 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
   });
 
 
+  console.log("bountySolidity : ", bountySolidity)
+
   const { write: startWorkPoylgon } = useContractWrite({
     ...contractConfig,
     functionName: 'startWork',
@@ -133,7 +135,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
     if (localStorageChain === "near") {
       return Math.floor(Date.now() / 1000) > parseInt(bounty?.deadline);
     } else {
-      return Math.floor(Date.now() / 1000) > parseInt(bountySolidity?.deadline);
+      return Math.floor(Date.now() / 1000) > parseInt(bountySolidity?.data?.deadline);
     }
   }
 
@@ -203,7 +205,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
 
   return (
     <aside className="col-span-5 md:col-span-1 my-4 border-t-2 border-gray-100 dark:border-zinc-800 md:my-0 md:border-t-0">
-      <SidebarItem title="Status" content={<StatusLabel status="open" />} />
+      <SidebarItem title="Status" content={<StatusLabel status={isExpired() ? "Expired" : "Open"} />} />
       <SidebarItem
         title="Total bounty sum"
         content={
@@ -212,15 +214,17 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
               {!bounty ? "-" : pool + " Near"} - ${poolInDollars}
             </div>
             <div>
-              {bountySolidity?.data?.id === "" || bountySolidity.isLoading ? "-" : ethers.utils.formatEther(bountySolidity?.data?.pool).toString() + " Matic"} - ${maticPriceInDollars}
+              {bountySolidity?.data?.id === "" || bountySolidity.isLoading ? "-" : ethers.utils.formatEther(bountySolidity?.data?.pool ? bountySolidity?.data?.pool : 0).toString() + " Matic"} - ${maticPriceInDollars}
             </div>
           </>
         }
       />
-      {bounty && (
+      {bounty || bountySolidity?.data?.id !== "" && (
         <SidebarItem
           title="Deadline"
-          content={<div>{parseDate(bounty?.deadline)}</div>}
+          content={<><div>Near: {bounty?.deadline ? parseDate(bounty?.deadline) : "-"}</div>
+            <div>Polygon: {bountySolidity?.data?.id !== "" || bountySolidity.isLoading ? parseDate(bountySolidity?.data?.deadline) : "-"}</div>
+          </>}
         />
       )}
       <SidebarItem
