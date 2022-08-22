@@ -55,7 +55,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
 
     const walletChainFromLocalStorage = localStorage.getItem("wallet-chain")
 
-    console.log("walletChainFromLocalStorage", walletChainFromLocalStorage)
+
 
 
     if (walletChainFromLocalStorage === "near") {
@@ -67,7 +67,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
     return isNotConnected
   }
 
-  console.log(isNotConnectedToWallet())
+
 
 
   const postComment = async () => {
@@ -126,6 +126,16 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
         console.log(error);
       });
   };
+
+
+  const isExpired = () => {
+    const localStorageChain = localStorage.getItem("wallet-chain")
+    if (localStorageChain === "near") {
+      return Math.floor(Date.now() / 1000) > parseInt(bounty?.deadline);
+    } else {
+      return Math.floor(Date.now() / 1000) > parseInt(bountySolidity?.deadline);
+    }
+  }
 
   /* A hook that is called when the component is mounted.
   In order to fetch the bounty stored in the contract
@@ -230,7 +240,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
           onClick={() =>
             router.push(`/issues/${props.issue.number}/add-bounty`)
           }
-          disabled={isNotConnectedToWallet()}
+          disabled={isNotConnectedToWallet() || isExpired()}
         >
           Add Bounty
         </Button>
@@ -261,7 +271,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
             }
           }}
           disabled={
-            isStartWorkDisabled()
+            isStartWorkDisabled() || isExpired()
           }
         >
           {isApplyingToWork ? "Loading..." : "Start Work"}
