@@ -27,7 +27,7 @@ import NearLogo from "../../common/components/icons/near-logo"
 import PolygonLogo from "../../common/components/icons/polygon-logo"
 import { ethers } from "ethers";
 import { viewFunction } from "features/near/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { utils } from "near-api-js";
 
 const octokit = new Octokit({ auth: config.github.pat });
@@ -80,6 +80,11 @@ export function IssuesListItem(props: Props) {
     args: props.issue.url,
     watch: true,
   });
+
+  useEffect(() => {
+    loadBountyDetails()
+  } , [])
+
 
   return (
     <li className="py-2 px-4 dark:hover:bg-zinc-800 hover:bg-gray-200 cursor-pointer overlow flex justify-between ">
