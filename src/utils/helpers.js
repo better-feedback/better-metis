@@ -1,6 +1,8 @@
 export const parseDate = (date) => {
-  const input = !isNaN(date) ? parseInt(date) : date;
-  var tempDate = new Date(input);
+  let newDate = date + "000";
+  const input = !isNaN(newDate) ? parseInt(newDate) : newDate;
+  let tempDate = new Date(input);
+
   const splitDate = tempDate.toString().split(" ");
   return `${splitDate[2]} ${splitDate[1]}, ${splitDate[3]}`;
 };
@@ -24,7 +26,7 @@ export const nearAccountToHex = (accountsArray) => {
     } else {
       result = result.substring(0, 40);
     }
-    resultArray.push("0x"+result);
+    resultArray.push("0x" + result);
   });
 
   return resultArray;
