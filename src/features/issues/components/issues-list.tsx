@@ -20,7 +20,7 @@ export function IssuesList(props: { title: string; issueType: IssueType }) {
   } = useIssuesQuery(props.issueType, currentPage);
 
 
-  console.log(props.issueType)
+
 
   return (
     <div className="border-2 border-gray-200 dark:border-zinc-800 rounded-md">
