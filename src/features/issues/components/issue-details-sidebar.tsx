@@ -132,10 +132,20 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
 
   const isExpired = () => {
     const localStorageChain = localStorage.getItem("wallet-chain")
+
+    if (!localStorageChain) {
+      return false
+    }
+
     if (localStorageChain === "near") {
-      return Math.floor(Date.now() / 1000) > parseInt(bounty?.deadline);
+      return !bounty ? false : Math.floor(Date.now() / 1000) > parseInt(bounty?.deadline);
     } else {
-      return Math.floor(Date.now() / 1000) > parseInt(bountySolidity?.data?.deadline);
+      if (bountySolidity?.data?.id !== "") {
+
+        return Math.floor(Date.now() / 1000) > parseInt(bountySolidity?.data?.deadline);
+      } else {
+        return false
+      }
     }
   }
 
