@@ -95,7 +95,6 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
   });
 
 
-  console.log("bountySolidity : ", bountySolidity)
 
   const { write: startWorkPoylgon } = useContractWrite({
     ...contractConfig,
