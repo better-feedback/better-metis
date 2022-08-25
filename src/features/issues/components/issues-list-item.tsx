@@ -83,7 +83,7 @@ export function IssuesListItem(props: Props) {
 
   useEffect(() => {
     loadBountyDetails()
-  } , [])
+  }, [])
 
 
   return (
@@ -99,12 +99,12 @@ export function IssuesListItem(props: Props) {
             <div className="flex w-full gap-x-2 py-2">
               <div className="flex items-center gap-x-2">
                 <NearLogo className="h-6" />
-                <span>{bounty ? pool : "-"} Near</span>
+                <span>{bounty != null ? pool : "-"} Near</span>
               </div>
 
               <div className="flex items-center gap-x-2">
                 <PolygonLogo className="h-6" />
-                <span>{bountySolidity?.data?.id !== "" ? ethers.utils.formatEther(bountySolidity?.data?.pool).toString() : "-"} MATIC</span>
+                <span>{bountySolidity?.data?.id !== "" ? ethers.utils.formatEther(bountySolidity?.data?.pool || "0").toString() : "-"} MATIC</span>
               </div>
 
             </div>
