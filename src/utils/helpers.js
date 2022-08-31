@@ -31,3 +31,25 @@ export const nearAccountToHex = (accountsArray) => {
 
   return resultArray;
 };
+
+export const isExpired = (bounty, bountySolidity) => {
+  const localStorageChain = localStorage.getItem("wallet-chain");
+
+  if (!localStorageChain) {
+    return false;
+  }
+
+  if (localStorageChain === "near") {
+    return !bounty
+      ? false
+      : Math.floor(Date.now() / 1000) > parseInt(bounty?.deadline);
+  } else {
+    if (bountySolidity?.data?.id !== "") {
+      return (
+        Math.floor(Date.now() / 1000) > parseInt(bountySolidity?.data?.deadline)
+      );
+    } else {
+      return false;
+    }
+  }
+};

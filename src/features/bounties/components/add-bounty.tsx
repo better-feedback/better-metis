@@ -177,12 +177,23 @@ export default function AddBounty(props: { issueNumber: number }) {
   }
 
 
+  
   const isExpired = () => {
     const localStorageChain = localStorage.getItem("wallet-chain")
+
+    if (!localStorageChain) {
+      return false
+    }
+
     if (localStorageChain === "near") {
-      return Math.floor(Date.now() / 1000) > parseInt(doesBountyExist?.deadline);
+      return !doesBountyExist ? false : Math.floor(Date.now() / 1000) > parseInt(doesBountyExist?.deadline);
     } else {
-      return Math.floor(Date.now() / 1000) > parseInt(bountyPolygon?.data?.deadline);
+      if (bountyPolygon?.data?.id !== "") {
+
+        return Math.floor(Date.now() / 1000) > parseInt(bountyPolygon?.data?.deadline);
+      } else {
+        return false
+      }
     }
   }
 
