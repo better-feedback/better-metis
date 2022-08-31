@@ -131,10 +131,14 @@ export function IssuesListItem(props: Props) {
             className={`text-[1.5rem] h-5	opacity-50 transition-all duration-300 hover:opacity-100 ${hasUserVotes("_up") && "text-[#FF6CE5] opactity-100"
               }`}
             onClick={async (e) => {
+
+
               e.stopPropagation();
+
+
               if (!isUserConnected())
                 return alert("To be able to vote, sign in to your wallet and get your address whitelisted by the team");
-              if (!canVote.data) return alert("To get vote access, get your address whitelisted by the team");
+              if ((process.env.NEXT_PUBLIC_USE_WHITELIST as string === 'true') && !canVote.data) return alert("To get vote access, get your address whitelisted by the team");
               try {
                 addVote.mutate({
                   issueNumber: issue.number,
@@ -151,7 +155,9 @@ export function IssuesListItem(props: Props) {
               e.stopPropagation();
               if (!isUserConnected())
                 return alert("To be able to vote, sign in to your wallet and get your address whitelisted by the team");
-              if (!canVote.data) return alert("To get vote access, get your address whitelisted by the team");
+
+
+              if ((process.env.NEXT_PUBLIC_USE_WHITELIST as string === 'true') && !canVote.data) return alert("To get vote access, get your address whitelisted by the team");
               try {
                 addVote.mutate({
                   issueNumber: issue.number,
