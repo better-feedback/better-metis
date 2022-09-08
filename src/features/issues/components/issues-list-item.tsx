@@ -1,7 +1,5 @@
 import Link from "next/link";
 
-import ListItemMetadata from "./list-item-metadata";
-
 import type { Issue, Label } from "../types";
 
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
@@ -92,31 +90,34 @@ export function IssuesListItem(props: Props) {
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-col">
             <h3 className="font-semibold">{issue.title}</h3>
-            <div className="text-xs">
+            <div className="py-1 text-xs text-gray-500">
               {`#${issue.number} opened on ${issue.created_at} by ${issue.user.login}`}
             </div>
 
-            <div className="flex w-full gap-x-2 py-2">
-              <div className="flex items-center gap-x-2">
-                <NearLogo className="h-6" />
-                <span>{bounty != null ? pool : "-"} Near</span>
-              </div>
+            <div className="flex w-full gap-x-2 text-xs">
+              {bounty != null ?
+                <div className="flex items-center py-1 gap-x-2">
+                  <NearLogo className="h-3 dark:fill-white" />
+                  <span> {pool} Near</span>
+                </div>
+              : null}
 
-              <div className="flex items-center gap-x-2">
-                <PolygonLogo className="h-6" />
-                <span>{bountySolidity?.data?.id !== "" ? ethers.utils.formatEther(bountySolidity?.data?.pool || "0").toString() : "-"} MATIC</span>
-              </div>
-
+              {bountySolidity?.data?.id !== "" ?
+                <div className="flex items-center py-1 gap-x-2">
+                  <PolygonLogo className="h-3 dark:fill-white" />
+                  <span>{ethers.utils.formatEther(bountySolidity?.data?.pool || "0").toString()} MATIC</span>
+                </div>
+              : null}
             </div>
 
-            <div className="flex gap-2 flex-wrap mt-1">
+            <div className="flex gap-2 py-1 flex-wrap">
               {issue?.labels.map((label: Label) => {
                 return (
                   <div
                     key={label.id}
                     className={`inline-flex items-center justify-center px-2 border-2 border-gray-200 dark:border-zinc-800 rounded-md bg-transparent text-gray-500`}
                   >
-                    <span className={`text-sm`}>{label.name}</span>
+                    <span className={`text-xs`}>{label.name}</span>
                   </div>
                 );
               })}
@@ -124,9 +125,8 @@ export function IssuesListItem(props: Props) {
           </div>
         </div>
       </Link>
-      <ListItemMetadata metadata={issue.metadata} />
       <div className="flex flex-row justify-center items-center">
-        <div className="flex flex-col justify-center items-center space-y-1 pr-1">
+        <div className="flex flex-col justify-center items-center space-y-4 pr-1">
           <IoIosArrowUp
             className={`text-[1.5rem] h-5	opacity-50 transition-all duration-300 hover:opacity-100 ${hasUserVotes("_up") && "text-[#FF6CE5] opactity-100"
               }`}
@@ -173,8 +173,7 @@ export function IssuesListItem(props: Props) {
           />
         </div>
 
-
-        <div className="flex flex-col justify-center items-center text-sm">
+        <div className="flex flex-col justify-center items-center space-y-4 text-sm">
           <span>{(data as CommentMatadata)?.upVotes}</span>
           <span>{(data as CommentMatadata)?.downVotes}</span>
         </div>

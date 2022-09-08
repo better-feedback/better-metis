@@ -58,11 +58,14 @@ export default function TokenAmountInput(props: {
             required
           />
           <Button
-            type="secondary"
+            type="icon"
             className="ml-2"
             onClick={handleClickTokenButton}
           >
-            {props.tokenValue ? props.tokenValue.symbol : "Select"}
+            <span>{props.tokenValue ? props.tokenValue.symbol : "Select"}</span>
+            <svg className="stroke-current w-4 h-4" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6.35693 9L12.3569 15L18.3569 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </Button>
         </div>
       </LabeledInput>
