@@ -2,7 +2,7 @@
 name: Metis Grant Application
 about: Apply for a Metis grant
 title: ''
-labels: feature, open
+labels: grant, open
 assignees: ''
 
 ---
