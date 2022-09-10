@@ -20,7 +20,7 @@ const IssuesListPage: NextPage = () => {
           <IssuesList issueType={issueTypes.LIVE} title="Live" />
         </div>
         <div className="mt-2 cursor-pointer border-2 border-gray-200 dark:border-zinc-800 rounded-md w-full h-[4rem] flex items-center justify-center" onClick={() => setIsModalOpen(true)}>
-          <span>Add Your Ideas</span>
+          <span>Add Your NFT Design Idea</span>
         </div>
         {
           isModalOpen &&

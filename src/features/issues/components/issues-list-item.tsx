@@ -93,7 +93,7 @@ export function IssuesListItem(props: Props) {
             <div className="py-1 text-xs text-gray-500">
               {`#${issue.number} opened on ${issue.created_at} by ${issue.user.login}`}
             </div>
-
+            {/*
             <div className="flex w-full gap-x-2 text-xs">
               {bounty != null ?
                 <div className="flex items-center py-1 gap-x-2">
@@ -109,6 +109,7 @@ export function IssuesListItem(props: Props) {
                 </div>
               : null}
             </div>
+            */}
 
             <div className="flex gap-2 py-1 flex-wrap">
               {issue?.labels.map((label: Label) => {

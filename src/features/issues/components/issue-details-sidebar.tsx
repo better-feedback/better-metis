@@ -237,14 +237,15 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
     <aside className="col-span-5 md:col-span-1 my-4 border-t-2 border-gray-100 dark:border-zinc-800 md:my-0 md:border-t-0">
       <SidebarItem title="Status" content={<StatusLabel status={isExpired() ? "Expired" : "Open"} />} />
       <SidebarItem
-        title="Total bounty sum"
+        title="Bounty pool"
         content={
           <>
             <div>
-              {!bounty ? "-" : pool + " Near"} - ${poolInDollars}
+              Bounties stopped for Metis, until our contracts are audited.
+              {/*{!bounty ? "-" : pool + " Near"} - ${poolInDollars}
             </div>
             <div>
-              {bountySolidity?.data?.id === "" || bountySolidity.isLoading ? "-" : ethers.utils.formatEther(bountySolidity?.data?.pool ? bountySolidity?.data?.pool : 0).toString() + " Matic"} - ${maticPriceInDollars}
+              {bountySolidity?.data?.id === "" || bountySolidity.isLoading ? "-" : ethers.utils.formatEther(bountySolidity?.data?.pool ? bountySolidity?.data?.pool : 0).toString() + " Matic"} - ${maticPriceInDollars}*/}
             </div>
           </>
         }
@@ -257,7 +258,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
           </>}
         />
       )}
-      <SidebarItem
+      {/*<SidebarItem
         title="Funders"
         content={
           <div className="flex gap-2 flex-wrap">
@@ -268,22 +269,22 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
               })}
           </div>
         }
-      />
+      />*/}
       <div className="flex flex-col gap-y-4 justify-center pt-4">
         <Button
           onClick={() =>
             router.push(`/issues/${props.issue.number}/add-bounty`)
           }
-          disabled={isNotConnectedToWallet() || isExpired()}
+          //disabled={isNotConnectedToWallet() || isExpired()}
+          disabled={true}
         >
           Add Bounty
         </Button>
 
-        <Button
+        {/*<Button
           onClick={async () => {
             setIsApplyingToWork(true);
 
-            /* Calling the startWork function in the contract. */
             if (walletChain === "near") {
 
               callFunction("startWork", { issueId: props.issue.url })
@@ -308,7 +309,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
           }
         >
           {isApplyingToWork ? "Loading..." : "Start Work"}
-        </Button>
+        </Button>*/}
       </div>
       {(isNotConnectedToWallet()) && (
         <p className="text-xs text-center mt-2 text-gray-500 dark:text-zinc-500">
@@ -323,7 +324,7 @@ export default function IssueDetailsSidebar(props: { issue: Issue }) {
           rel="noreferrer"
         >
         <AiFillGithub className="text-[1.5rem] cursor-pointer w-4 h-4 mr-2"/>
-          View on GitHub
+          Submit Design
         </a>
       </div>
     </aside>
